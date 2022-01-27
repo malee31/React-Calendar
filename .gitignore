@@ -1,0 +1,12 @@
+# Vim Files
+*.swp
+*.swo
+
+# Dependencies
+node_modules/
+
+# Private files
+private/
+
+# IDE Files
+.idea/
