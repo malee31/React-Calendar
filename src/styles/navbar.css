@@ -1,0 +1,33 @@
+nav {
+	position: fixed;
+	top: 0;
+	background-color: cornflowerblue;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+	/* Navbar Height */
+	height: 3rem;
+	padding: 0 1rem;
+}
+
+nav > a {
+	/* Navbar Height */
+	height: 3rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	background-color: #FFFFFF99;
+	padding: 0 .5rem;
+	text-decoration: none;
+	color: black;
+}
+
+main {
+	/* Navbar Height */
+	margin-top: 3rem;
+	min-height: calc(100vh - 3rem);
+}

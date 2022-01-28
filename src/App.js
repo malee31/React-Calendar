@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import { Provider } from 'react-redux';
+import ReduxStore from './ReduxStore.js';
+import IncludeNavbar from "./Components/IncludeNavbar";
+import './styles/App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<Provider store={ReduxStore}>
+			<div className="App">
+				<IncludeNavbar>
+					<header className="App-header">
+						React Calendar
+					</header>
+				</IncludeNavbar>
+			</div>
+		</Provider>
+	);
 }
 
 export default App;
