@@ -1,7 +1,9 @@
 import { Provider } from 'react-redux';
 import ReduxStore from './ReduxStore.js';
 import IncludeNavbar from "./Components/IncludeNavbar";
+import Calendar from "./Components/Calendar";
 import './styles/App.css';
+import SectionPadding from "./Components/SectionPadding";
 
 function App() {
 	return (
@@ -11,6 +13,9 @@ function App() {
 					<header className="App-header">
 						React Calendar
 					</header>
+					<SectionPadding>
+						<Calendar/>
+					</SectionPadding>
 				</IncludeNavbar>
 			</div>
 		</Provider>
