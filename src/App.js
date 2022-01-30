@@ -10,9 +10,6 @@ function App() {
 		<Provider store={ReduxStore}>
 			<div className="App">
 				<IncludeNavbar>
-					<header className="App-header">
-						React Calendar
-					</header>
 					<SectionPadding>
 						<Calendar/>
 					</SectionPadding>
