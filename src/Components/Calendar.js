@@ -2,7 +2,7 @@ import "../styles/calendar.css";
 
 function CalendarCell(props) {
 	return (
-		<div className="calendar-cell">
+		<div className={`calendar-cell ${props.disabled ? "disabled" : ""}`}>
 			Cell
 		</div>
 	);
@@ -11,13 +11,22 @@ function CalendarCell(props) {
 function CalendarRow(props) {
 	return (
 		<div className="calendar-row">
+			<CalendarCell disabled/>
 			<CalendarCell/>
 			<CalendarCell/>
 			<CalendarCell/>
 			<CalendarCell/>
 			<CalendarCell/>
-			<CalendarCell/>
-			<CalendarCell/>
+			<CalendarCell disabled/>
+		</div>
+	);
+}
+
+
+function CalendarHeader(props) {
+	return (
+		<div className="calendar-header">
+			Calendar
 		</div>
 	);
 }
@@ -25,6 +34,7 @@ function CalendarRow(props) {
 export default function Calendar(props) {
 	return (
 		<div className="calendar-wrapper">
+			<CalendarHeader/>
 			<CalendarRow/>
 			<CalendarRow/>
 			<CalendarRow/>

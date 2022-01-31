@@ -9,12 +9,13 @@
 
 .calendar-header {
 	width: 100%;
-	height: 3rem;
+	height: 7vh;
 	font-size: calc(10px + 2vmin);
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	flex-direction: row;
+	justify-content: space-around;
 	align-items: center;
+	border: 1px solid white;
 }
 
 .calendar-contents {
@@ -32,11 +33,16 @@
 	align-items: flex-start;
 	width: 100%;
 	height: 15vh;
-	border: 1px solid white;
+	background-color: white;
+	border: 1px solid cornflowerblue;
 }
 
 .calendar-cell {
 	flex-grow: 1;
-	border: 1px solid white;
+	border: 1px solid cornflowerblue;
 	height: 100%;
+}
+
+.calendar-cell.disabled {
+	background-color: lightgray;
 }
