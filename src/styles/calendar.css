@@ -41,8 +41,31 @@
 	flex-grow: 1;
 	border: 1px solid cornflowerblue;
 	height: 100%;
+	z-index: 0;
+	position: relative;
 }
 
 .calendar-cell.disabled {
 	background-color: lightgray;
+}
+
+.calendar-cell-layer {
+	display: flex;
+	flex-grow: 1;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+}
+
+.calendar-cell-number {
+	justify-content: flex-start;
+	padding: 5%;
+}
+
+.calendar-row-weekly {
+	/* Multiply calendar-row.height by 5 */
+	height: 75vh;
 }
