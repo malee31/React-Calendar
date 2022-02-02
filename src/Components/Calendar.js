@@ -40,15 +40,19 @@ function CalendarRow(props) {
 function CalendarHeader(props) {
 	return (
 		<div className="calendar-header">
-			Calendar
+			{props.children}
 		</div>
 	);
 }
 
 export default function Calendar(props) {
+	const today = props.date;
+	const dateCopy = new Date(today);
 	return (
 		<div className="calendar-wrapper">
-			<CalendarHeader/>
+			<CalendarHeader>
+				{today.toLocaleString("default", { month: "long" })} {today.getFullYear()}
+			</CalendarHeader>
 			<CalendarRow start={1}/>
 			<CalendarRow start={8}/>
 			<CalendarRow start={15}/>
