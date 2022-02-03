@@ -25,13 +25,8 @@ function CalendarCell(props) {
 function CalendarRow(props) {
 	return (
 		<div className="calendar-row">
-			{
-				[...Array(7).keys()]
-					.map(num => num + props.start)
-					.map((dayNum, index) =>
-						<CalendarCell dayNum={dayNum} disabled={index === 0 || index === 6} key={dayNum}/>
-					)
-			}
+			{props.weekData
+				.map(dayData => <CalendarCell dayNum={dayData.dayOfMonth} disabled={dayData.isWeekend || !dayData.isInMonth} key={dayData.dateString}/>)}
 		</div>
 	);
 }
@@ -45,19 +40,50 @@ function CalendarHeader(props) {
 	);
 }
 
+/**
+ * Returns a size 5 array of weeks in a month. Each week is another array containing objects with data about each day<br>
+ * The days start on Sunday and the first week will contain the first day of the month. There WILL be overflow into the next and/or previous month's days
+ * @param {number} year Year to get month data from
+ * @param {number} month Month to get month data from (Zero-indexed)
+ * @returns {Object[][]} Returns array described above
+ */
+function getMonthData(year, month) {
+	const monthData = [];
+	const dateProbe = new Date(year, month, 1);
+	while(dateProbe.getDay() !== 0) {
+		// Jump back to the closest preceding Sunday if needed
+		dateProbe.setDate(dateProbe.getDate() - 1);
+	}
+	for(let weekNum = 0; weekNum < 5; weekNum++) {
+		monthData.push([]);
+		for(let dayNum = 0; dayNum < 7; dayNum++) {
+			const dayOfWeek = dateProbe.getDay();
+			const probedMonth = dateProbe.getMonth();
+			monthData[weekNum][dayNum] = {
+				year: dateProbe.getFullYear(),
+				month: probedMonth,
+				dayOfMonth: dateProbe.getDate(),
+				dayOfWeek: dayOfWeek,
+				week: weekNum,
+				isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
+				isInMonth: probedMonth === month,
+				dateString: dateProbe.toISOString()
+			};
+			dateProbe.setDate(dateProbe.getDate() + 1);
+		}
+	}
+	return monthData;
+}
+
 export default function Calendar(props) {
 	const today = props.date;
-	const dateCopy = new Date(today);
+	const monthData = getMonthData(today.getFullYear(), today.getMonth());
 	return (
 		<div className="calendar-wrapper">
 			<CalendarHeader>
 				{today.toLocaleString("default", { month: "long" })} {today.getFullYear()}
 			</CalendarHeader>
-			<CalendarRow start={1}/>
-			<CalendarRow start={8}/>
-			<CalendarRow start={15}/>
-			<CalendarRow start={22}/>
-			<CalendarRow start={29}/>
+			{monthData.map(weekData => <CalendarRow weekData={weekData}/>)}
 		</div>
 	);
 }
