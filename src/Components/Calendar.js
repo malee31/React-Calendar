@@ -1,4 +1,6 @@
 import "../styles/calendar.css";
+import store from "../ReduxStore";
+import { useEffect } from "react";
 
 function CalendarCellLayer(props) {
 	const additionalStyle = Object.assign({}, props.style);
@@ -76,14 +78,20 @@ function getMonthData(year, month) {
 }
 
 export default function Calendar(props) {
-	const today = props.date;
+	useEffect(() => {
+		return store.subscribe(() => {
+			console.log("Store state change detected by Calendar");
+		});
+	}, []);
+
+	const today = store.getState().today;
 	const monthData = getMonthData(today.getFullYear(), today.getMonth());
 	return (
 		<div className="calendar-wrapper">
 			<CalendarHeader>
 				{today.toLocaleString("default", { month: "long" })} {today.getFullYear()}
 			</CalendarHeader>
-			{monthData.map(weekData => <CalendarRow weekData={weekData}/>)}
+			{monthData.map((weekData, weekNum) => <CalendarRow weekData={weekData} key={`Week-${weekNum}`}/>)}
 		</div>
 	);
 }

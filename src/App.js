@@ -6,13 +6,12 @@ import './styles/App.css';
 import SectionPadding from "./Components/SectionPadding";
 
 function App() {
-	const today = new Date();
 	return (
 		<Provider store={ReduxStore}>
 			<div className="App">
 				<IncludeNavbar>
 					<SectionPadding>
-						<Calendar date={today}/>
+						<Calendar/>
 					</SectionPadding>
 				</IncludeNavbar>
 			</div>
