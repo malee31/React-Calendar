@@ -13,9 +13,30 @@
 	font-size: calc(10px + 2vmin);
 	display: flex;
 	flex-direction: row;
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: center;
 	border: 1px solid white;
+}
+
+.calendar-header > * {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.calendar-header-controls-left, .calendar-header-controls-right {
+	border: 0 solid black;
+	width: 5%;
+}
+
+.calendar-header-controls-left {
+	border-right-width: 1px;
+}
+
+.calendar-header-controls-right {
+	border-left-width: 1px;
 }
 
 .calendar-contents {

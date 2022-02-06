@@ -1,6 +1,6 @@
 import "../styles/calendar.css";
 import store from "../ReduxStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function CalendarCellLayer(props) {
 	const additionalStyle = Object.assign({}, props.style);
@@ -33,11 +33,33 @@ function CalendarRow(props) {
 	);
 }
 
-
 function CalendarHeader(props) {
+	const incrementMonth = () => {
+		console.log("Month Incremented");
+		store.dispatch({
+			type: "FOCUS",
+			offset: 1
+		});
+	};
+	const decrementMonth = () => {
+		console.log("Month Decremented");
+		store.dispatch({
+			type: "FOCUS",
+			offset: -1
+		});
+	};
+
 	return (
 		<div className="calendar-header">
-			{props.children}
+			<div className="calendar-header-controls-left" onClick={decrementMonth}>
+				&lt;
+			</div>
+			<div>
+				{props.children}
+			</div>
+			<div className="calendar-header-controls-right" onClick={incrementMonth}>
+				&gt;
+			</div>
 		</div>
 	);
 }
@@ -78,18 +100,21 @@ function getMonthData(year, month) {
 }
 
 export default function Calendar(props) {
+	console.log("Render");
+	const [focusValue, setFocus] = useState(store.getState().focus);
 	useEffect(() => {
 		return store.subscribe(() => {
 			console.log("Store state change detected by Calendar");
+			setFocus(store.getState().focus);
 		});
 	}, []);
 
-	const today = store.getState().today;
-	const monthData = getMonthData(today.getFullYear(), today.getMonth());
+	const focus = new Date(store.getState().focus);
+	const monthData = getMonthData(focus.getFullYear(), focus.getMonth());
 	return (
 		<div className="calendar-wrapper">
 			<CalendarHeader>
-				{today.toLocaleString("default", { month: "long" })} {today.getFullYear()}
+				{focus.toLocaleString("default", { month: "long" })} {focus.getFullYear()}
 			</CalendarHeader>
 			{monthData.map((weekData, weekNum) => <CalendarRow weekData={weekData} key={`Week-${weekNum}`}/>)}
 		</div>
