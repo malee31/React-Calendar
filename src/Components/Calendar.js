@@ -64,6 +64,19 @@ function CalendarHeader(props) {
 	);
 }
 
+function CalendarWeekdays() {
+	const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+	return (
+		<div className="calendar-weekdays">
+			{weekdays.map(day =>
+				<div>
+					{day}
+				</div>
+			)}
+		</div>
+	);
+}
+
 /**
  * Returns a size 5 array of weeks in a month. Each week is another array containing objects with data about each day<br>
  * The days start on Sunday and the first week will contain the first day of the month. There WILL be overflow into the next and/or previous month's days
@@ -101,7 +114,8 @@ function getMonthData(year, month) {
 
 export default function Calendar(props) {
 	console.log("Render");
-	const [focusValue, setFocus] = useState(store.getState().focus);
+	// Using toString as a workaround for IDE type checking
+	const [focusValue, setFocus] = useState(store.getState().focus.toString());
 	useEffect(() => {
 		return store.subscribe(() => {
 			console.log("Store state change detected by Calendar");
@@ -109,13 +123,14 @@ export default function Calendar(props) {
 		});
 	}, []);
 
-	const focus = new Date(store.getState().focus);
+	const focus = new Date(focusValue);
 	const monthData = getMonthData(focus.getFullYear(), focus.getMonth());
 	return (
 		<div className="calendar-wrapper">
 			<CalendarHeader>
 				{focus.toLocaleString("default", { month: "long" })} {focus.getFullYear()}
 			</CalendarHeader>
+			<CalendarWeekdays/>
 			{monthData.map((weekData, weekNum) => <CalendarRow weekData={weekData} key={`Week-${weekNum}`}/>)}
 		</div>
 	);

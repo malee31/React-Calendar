@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+const TODAY = new Date();
 const initialState = {
-	today: (new Date()).toString(),
-	focus: (new Date()).toString()
+	today: TODAY.toString(),
+	focus: TODAY.toString(),
+	navEnabled: false
 };
 
 function rootReducer(state = initialState, action) {
