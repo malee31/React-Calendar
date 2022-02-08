@@ -87,19 +87,27 @@ function CalendarWeekdays() {
 function getMonthData(year, month) {
 	const monthData = [];
 	const dateProbe = new Date(year, month, 1);
+	const monthDays = (new Date(year, month + 1, 0)).getDate();
 	while(dateProbe.getDay() !== 0) {
 		// Jump back to the closest preceding Sunday if needed
 		dateProbe.setDate(dateProbe.getDate() - 1);
 	}
-	for(let weekNum = 0; weekNum < 5; weekNum++) {
+
+	let lastDay = 0;
+	for(let weekNum = 0; lastDay < monthDays; weekNum++) {
 		monthData.push([]);
 		for(let dayNum = 0; dayNum < 7; dayNum++) {
 			const dayOfWeek = dateProbe.getDay();
 			const probedMonth = dateProbe.getMonth();
+			const dayOfMonth = dateProbe.getDate();
+			if(dayOfMonth > lastDay && weekNum > 1) {
+				lastDay = dayOfMonth;
+			}
+
 			monthData[weekNum][dayNum] = {
 				year: dateProbe.getFullYear(),
 				month: probedMonth,
-				dayOfMonth: dateProbe.getDate(),
+				dayOfMonth: dayOfMonth,
 				dayOfWeek: dayOfWeek,
 				week: weekNum,
 				isWeekend: dayOfWeek === 0 || dayOfWeek === 6,

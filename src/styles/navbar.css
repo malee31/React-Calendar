@@ -10,6 +10,7 @@ nav {
 	/* Navbar Height */
 	height: 3rem;
 	padding: 0 1rem;
+	z-index: 1;
 }
 
 nav > a {
