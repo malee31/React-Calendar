@@ -33,22 +33,23 @@ function CalendarRow(props) {
 	);
 }
 
-function CalendarHeader(props) {
-	const incrementMonth = () => {
-		console.log("Month Incremented");
-		store.dispatch({
-			type: "FOCUS",
-			offset: 1
-		});
-	};
-	const decrementMonth = () => {
-		console.log("Month Decremented");
-		store.dispatch({
-			type: "FOCUS",
-			offset: -1
-		});
-	};
+function decrementMonth() {
+	console.log("Month Decremented");
+	store.dispatch({
+		type: "FOCUS",
+		offset: -1
+	});
+}
 
+function incrementMonth() {
+	console.log("Month Incremented");
+	store.dispatch({
+		type: "FOCUS",
+		offset: 1
+	});
+}
+
+function CalendarHeader(props) {
 	return (
 		<div className="calendar-header">
 			<div className="calendar-header-controls-left" onClick={decrementMonth}>
