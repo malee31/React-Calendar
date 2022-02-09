@@ -15,7 +15,7 @@ function CalendarCellLayer(props) {
 function CalendarCell(props) {
 	const dayNum = props.dayNum || -1;
 	return (
-		<div className={`calendar-cell ${props.disabled ? "disabled" : ""}`}>
+		<div className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""}`}>
 			<CalendarCellLayer className="calendar-cell-number">
 				<span>{dayNum}</span>
 			</CalendarCellLayer>
@@ -28,7 +28,7 @@ function CalendarRow(props) {
 	return (
 		<div className="calendar-row">
 			{props.weekData
-				.map(dayData => <CalendarCell dayNum={dayData.dayOfMonth} disabled={dayData.isWeekend || !dayData.isInMonth} key={dayData.dateString}/>)}
+				.map(dayData => <CalendarCell dayNum={dayData.dayOfMonth} isWeekend={dayData.isWeekend} disabled={!dayData.isInMonth} key={dayData.dateString}/>)}
 		</div>
 	);
 }
