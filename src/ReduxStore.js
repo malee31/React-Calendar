@@ -4,7 +4,7 @@ const TODAY = new Date();
 const initialState = {
 	today: TODAY.toString(),
 	focus: TODAY.toString(),
-	navEnabled: false
+	zoom: "MONTH"
 };
 
 function rootReducer(state = initialState, action) {
@@ -20,7 +20,9 @@ function rootReducer(state = initialState, action) {
 				focus: focus.toString()
 			};
 		case "ZOOM":
+			// TODO: Allow altering whether ["MONTH", "WEEK", "DAY"] are being zoomed in onto
 			return {
+				zoom: "MONTH",
 				...state
 			};
 		default:

@@ -1,5 +1,6 @@
 import "../styles/calendar.css";
 import store from "../ReduxStore";
+import getMonthData from "../scripts/dateData";
 import { useEffect, useState } from "react";
 
 function CalendarCellLayer(props) {
@@ -13,7 +14,7 @@ function CalendarCellLayer(props) {
 }
 
 function CalendarCell(props) {
-	const dayNum = props.dayNum || -1;
+	const dayNum = props.dayNum ?? -1;
 	return (
 		<div className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""}`}>
 			<CalendarCellLayer className="calendar-cell-number">
@@ -27,8 +28,15 @@ function CalendarCell(props) {
 function CalendarRow(props) {
 	return (
 		<div className="calendar-row">
-			{props.weekData
-				.map(dayData => <CalendarCell dayNum={dayData.dayOfMonth} isWeekend={dayData.isWeekend} disabled={!dayData.isInMonth} key={dayData.dateString}/>)}
+			{props.weekData.days
+				.map((dayData, index) => {
+					if(dayData === null) {
+						return <CalendarCell dayNum="" disabled={true} key={`Disabled-${index}`}/>;
+					} else {
+						return <CalendarCell dayNum={dayData.day} isWeekend={dayData.isWeekend} key={`Day-${dayData.day}`}/>;
+					}
+				})
+			}
 		</div>
 	);
 }
@@ -78,50 +86,7 @@ function CalendarWeekdays() {
 	);
 }
 
-/**
- * Returns a size 5 array of weeks in a month. Each week is another array containing objects with data about each day<br>
- * The days start on Sunday and the first week will contain the first day of the month. There WILL be overflow into the next and/or previous month's days
- * @param {number} year Year to get month data from
- * @param {number} month Month to get month data from (Zero-indexed)
- * @returns {Object[][]} Returns array described above
- */
-function getMonthData(year, month) {
-	const monthData = [];
-	const dateProbe = new Date(year, month, 1);
-	const monthDays = (new Date(year, month + 1, 0)).getDate();
-	while(dateProbe.getDay() !== 0) {
-		// Jump back to the closest preceding Sunday if needed
-		dateProbe.setDate(dateProbe.getDate() - 1);
-	}
-
-	let lastDay = 0;
-	for(let weekNum = 0; lastDay < monthDays; weekNum++) {
-		monthData.push([]);
-		for(let dayNum = 0; dayNum < 7; dayNum++) {
-			const dayOfWeek = dateProbe.getDay();
-			const probedMonth = dateProbe.getMonth();
-			const dayOfMonth = dateProbe.getDate();
-			if(dayOfMonth > lastDay && weekNum > 1) {
-				lastDay = dayOfMonth;
-			}
-
-			monthData[weekNum][dayNum] = {
-				year: dateProbe.getFullYear(),
-				month: probedMonth,
-				dayOfMonth: dayOfMonth,
-				dayOfWeek: dayOfWeek,
-				week: weekNum,
-				isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
-				isInMonth: probedMonth === month,
-				dateString: dateProbe.toISOString()
-			};
-			dateProbe.setDate(dateProbe.getDate() + 1);
-		}
-	}
-	return monthData;
-}
-
-export default function Calendar(props) {
+export default function Calendar() {
 	console.log("Render");
 	// Using toString as a workaround for IDE type checking
 	const [focusValue, setFocus] = useState(store.getState().focus.toString());
@@ -134,13 +99,16 @@ export default function Calendar(props) {
 
 	const focus = new Date(focusValue);
 	const monthData = getMonthData(focus.getFullYear(), focus.getMonth());
+
 	return (
 		<div className="calendar-wrapper">
 			<CalendarHeader>
 				{focus.toLocaleString("default", { month: "long" })} {focus.getFullYear()}
 			</CalendarHeader>
 			<CalendarWeekdays/>
-			{monthData.map((weekData, weekNum) => <CalendarRow weekData={weekData} key={`Week-${weekNum}`}/>)}
+			{monthData.weeks.map(weekData =>
+				<CalendarRow weekData={weekData} key={`Month-${monthData.month}-Week-${weekData.weekNumber}`}/>
+			)}
 		</div>
 	);
 }
