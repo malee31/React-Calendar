@@ -19,6 +19,10 @@ function rootReducer(state = initialState, action) {
 				...state,
 				focus: focus.toString()
 			};
+		case "ZOOM":
+			return {
+				...state
+			};
 		default:
 			return state;
 	}
