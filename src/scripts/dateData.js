@@ -25,9 +25,13 @@
  * Returns information about a month and each day of the month using the Date object
  * @param {number} year Year to get month data from
  * @param {number} month Month to get month data from (Zero-indexed)
+ * @param {boolean} [includeSurrounding = false] If set to true, the MonthData will also have its previous and next properties set
  * @returns {MonthData} Returns MonthData object with a previous and next field
  */
-function getMonthData(year, month) {
+function getMonthData(year, month, includeSurrounding = false) {
+	const dateProbe = new Date(year, month, 1);
+	month = dateProbe.getMonth();
+	year = dateProbe.getFullYear();
 	/** @type MonthData */
 	const monthData = {
 		year: year,
@@ -36,7 +40,6 @@ function getMonthData(year, month) {
 		weeks: []
 	};
 
-	const dateProbe = new Date(year, month, 1);
 	for(let weekNum = 1; dateProbe.getDate() <= monthData.daysInMonth && dateProbe.getMonth() === month; weekNum++) {
 		const dayData = new Array(7).fill(null);
 		monthData.weeks.push({
@@ -56,25 +59,11 @@ function getMonthData(year, month) {
 			};
 			dateProbe.setDate(dayOfMonth + 1);
 		} while(dateProbe.getDay() !== 0 && dateProbe.getMonth() === month);
+	}
 
-		/*for(let dayNum = 0; dayNum < 7; dayNum++) {
-			const dayOfWeek = dateProbe.getDay();
-			const probedMonth = dateProbe.getMonth();
-			const dayOfMonth = dateProbe.getDate();
-			if(dayOfMonth > lastDay && weekNum > 1) {
-				lastDay = dayOfMonth;
-			}
-
-			monthData[weekNum][dayNum] = {
-				year: dateProbe.getFullYear(),
-				month: probedMonth,
-				dayOfMonth: dayOfMonth,
-				dayOfWeek: dayOfWeek,
-				week: weekNum,
-				isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
-			};
-			dateProbe.setDate(dateProbe.getDate() + 1);
-		}*/
+	if(includeSurrounding) {
+		monthData.previous = getMonthData(year, month - 1);
+		monthData.next = getMonthData(year, month + 1);
 	}
 	return monthData;
 }

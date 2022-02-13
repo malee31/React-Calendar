@@ -42,7 +42,7 @@ function CalendarRow(props) {
 }
 
 function decrementMonth() {
-	console.log("Month Decremented");
+	// console.log("Month Decremented");
 	store.dispatch({
 		type: "FOCUS",
 		offset: -1
@@ -50,7 +50,7 @@ function decrementMonth() {
 }
 
 function incrementMonth() {
-	console.log("Month Incremented");
+	// console.log("Month Incremented");
 	store.dispatch({
 		type: "FOCUS",
 		offset: 1
@@ -78,7 +78,7 @@ function CalendarWeekdays() {
 	return (
 		<div className="calendar-weekdays">
 			{weekdays.map(day =>
-				<div>
+				<div key={`${day}-Label`}>
 					{day}
 				</div>
 			)}
@@ -87,18 +87,17 @@ function CalendarWeekdays() {
 }
 
 export default function Calendar() {
-	console.log("Render");
 	// Using toString as a workaround for IDE type checking
 	const [focusValue, setFocus] = useState(store.getState().focus.toString());
 	useEffect(() => {
 		return store.subscribe(() => {
-			console.log("Store state change detected by Calendar");
+			// console.log("Store state change detected by Calendar");
 			setFocus(store.getState().focus);
 		});
 	}, []);
 
 	const focus = new Date(focusValue);
-	const monthData = getMonthData(focus.getFullYear(), focus.getMonth());
+	const monthData = getMonthData(focus.getFullYear(), focus.getMonth(), true);
 
 	return (
 		<div className="calendar-wrapper">

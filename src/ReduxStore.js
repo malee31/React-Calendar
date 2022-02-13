@@ -10,11 +10,10 @@ const initialState = {
 function rootReducer(state = initialState, action) {
 	switch(action.type) {
 		case "FOCUS":
-			console.log("Focus changed");
 			const focus = new Date(state.focus);
 			focus.setMonth(focus.getMonth() + action.offset);
 			focus.setDate(1);
-			console.log(`Focus: ${focus} + ${JSON.stringify(action)}`);
+			console.log(`Focus Changed to ${focus} + ${JSON.stringify(action)}`);
 			return {
 				...state,
 				focus: focus.toString()
