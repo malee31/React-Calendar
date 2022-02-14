@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 const TODAY = new Date();
+
 const initialState = {
 	today: TODAY.toString(),
 	focus: TODAY.toString(),

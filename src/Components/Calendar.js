@@ -89,25 +89,33 @@ function CalendarWeekdays() {
 export default function Calendar() {
 	// Using toString as a workaround for IDE type checking
 	const [focusValue, setFocus] = useState(store.getState().focus.toString());
+	const [zoomValue, setZoom] = useState(store.getState().zoom);
 	useEffect(() => {
 		return store.subscribe(() => {
 			// console.log("Store state change detected by Calendar");
+			// TODO: Check to make sure unchanged values don't fire a rerender
 			setFocus(store.getState().focus);
+			setZoom(store.getState().zoom);
 		});
 	}, []);
 
 	const focus = new Date(focusValue);
 	const monthData = getMonthData(focus.getFullYear(), focus.getMonth(), true);
 
+	// TODO: Allow specifying week
 	return (
 		<div className="calendar-wrapper">
 			<CalendarHeader>
 				{focus.toLocaleString("default", { month: "long" })} {focus.getFullYear()}
 			</CalendarHeader>
 			<CalendarWeekdays/>
-			{monthData.weeks.map(weekData =>
-				<CalendarRow weekData={weekData} key={`Month-${monthData.month}-Week-${weekData.weekNumber}`}/>
-			)}
+			{zoomValue === "MONTH" ?
+				monthData.weeks.map(weekData =>
+					<CalendarRow weekData={weekData} key={`Month-${monthData.month}-Week-${weekData.weekNumber}`}/>
+				) : zoomValue === "WEEK" ?
+					<CalendarRow weekData={monthData.weeks[0]} key={`Month-${monthData.weeks[0].month}-Week-${monthData.weeks[0].weekNumber}`}/>
+				: <div>TODO</div>
+			}
 		</div>
 	);
 }
