@@ -1,23 +1,31 @@
 import { configureStore } from '@reduxjs/toolkit';
+import getMonthData from "./scripts/dateData";
 
 const TODAY = new Date();
 
 const initialState = {
 	today: TODAY.toString(),
-	focus: TODAY.toString(),
+	focus: {
+		month: {},
+		week: {},
+		day: {},
+		string: TODAY.toString()
+	},
 	zoom: "MONTH"
 };
 
 function rootReducer(state = initialState, action) {
 	switch(action.type) {
 		case "FOCUS":
-			const focus = new Date(state.focus);
+			const focus = new Date(state.focus.string);
 			focus.setMonth(focus.getMonth() + action.offset);
 			focus.setDate(1);
 			console.log(`Focus Changed to ${focus} + ${JSON.stringify(action)}`);
 			return {
 				...state,
-				focus: focus.toString()
+				focus: {
+					string: focus.toString()
+				}
 			};
 		case "ZOOM":
 			// TODO: Allow altering whether ["MONTH", "WEEK", "DAY"] are being zoomed in onto

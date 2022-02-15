@@ -87,14 +87,13 @@ function CalendarWeekdays() {
 }
 
 export default function Calendar() {
-	// Using toString as a workaround for IDE type checking
-	const [focusValue, setFocus] = useState(store.getState().focus.toString());
+	const [focusValue, setFocus] = useState(store.getState().focus.string);
 	const [zoomValue, setZoom] = useState(store.getState().zoom);
 	useEffect(() => {
 		return store.subscribe(() => {
 			// console.log("Store state change detected by Calendar");
-			// TODO: Check to make sure unchanged values don't fire a rerender
-			setFocus(store.getState().focus);
+			// TODO: Check to make sure unchanged values don't fire a re-render
+			setFocus(store.getState().focus.string);
 			setZoom(store.getState().zoom);
 		});
 	}, []);
