@@ -87,7 +87,7 @@ function CalendarWeekdays() {
 }
 
 export default function Calendar() {
-	const [focusValue, setFocus] = useState(store.getState().focus.string);
+	const [focusObj, setFocus] = useState(store.getState().focus);
 	const [zoomValue, setZoom] = useState(store.getState().zoom);
 	useEffect(() => {
 		return store.subscribe(() => {
@@ -98,10 +98,11 @@ export default function Calendar() {
 		});
 	}, []);
 
-	const focus = new Date(focusValue);
-	const monthData = getMonthData(focus.getFullYear(), focus.getMonth(), true);
+	const focus = new Date(focusObj.string);
+	const monthData = focusObj.month;
 
 	// TODO: Allow specifying week
+	// TODO: Add locale string to month data
 	return (
 		<div className="calendar-wrapper">
 			<CalendarHeader>
@@ -109,11 +110,11 @@ export default function Calendar() {
 			</CalendarHeader>
 			<CalendarWeekdays/>
 			{zoomValue === "MONTH" ?
-				monthData.weeks.map(weekData =>
+				focusObj.month.weeks.map(weekData =>
 					<CalendarRow weekData={weekData} key={`Month-${monthData.month}-Week-${weekData.weekNumber}`}/>
 				) : zoomValue === "WEEK" ?
-					<CalendarRow weekData={monthData.weeks[0]} key={`Month-${monthData.weeks[0].month}-Week-${monthData.weeks[0].weekNumber}`}/>
-				: <div>TODO</div>
+					<CalendarRow weekData={focusObj.week} key={`Month-${monthData.weeks[focusObj.week.weekNumber].month}-Week-${focusObj.week.weekNumber}`}/>
+				: <CalendarCell dayNum={focusObj.day.day} isWeekend={focusObj.day.isWeekend} key={`Day-${focusObj.day.day}`}/>
 			}
 		</div>
 	);

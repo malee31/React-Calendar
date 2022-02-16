@@ -17,6 +17,7 @@
 /**
  * @typedef {Object} DayData
  * @property {number} day Day of month. Starts with 1 as the first day
+ * @property {number} dayNumber Day of week. Starts with 0 as Sunday
  * @property {number} dayOfWeek Day of the week. Starts with 0 as Sunday and ends with 6 as Saturday
  * @property {boolean} isWeekend Whether the day of the week is Sunday or Saturday. Made for convenience
  */
@@ -52,6 +53,7 @@ function getMonthData(year, month, includeSurrounding = false) {
 			const dayOfMonth = dateProbe.getDate();
 			dayData[dayOfWeek] = {
 				day: dayOfMonth,
+				dayNumber: dateProbe.getDay(),
 				dayOfWeek: dayOfWeek,
 				isWeekend: dayOfWeek === 0 || dayOfWeek === 6
 				// isInMonth: probedMonth === month,
