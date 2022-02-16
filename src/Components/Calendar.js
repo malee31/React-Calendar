@@ -86,6 +86,14 @@ function CalendarWeekdays() {
 	);
 }
 
+function CalendarContent(props) {
+	return (
+		<div className="calendar-content">
+			{props.children}
+		</div>
+	);
+}
+
 export default function Calendar() {
 	const [focusObj, setFocus] = useState(store.getState().focus);
 	const [zoomValue, setZoom] = useState(store.getState().zoom);
@@ -93,7 +101,7 @@ export default function Calendar() {
 		return store.subscribe(() => {
 			// console.log("Store state change detected by Calendar");
 			// TODO: Check to make sure unchanged values don't fire a re-render
-			setFocus(store.getState().focus.string);
+			setFocus(store.getState().focus);
 			setZoom(store.getState().zoom);
 		});
 	}, []);
@@ -109,13 +117,15 @@ export default function Calendar() {
 				{focus.toLocaleString("default", { month: "long" })} {focus.getFullYear()}
 			</CalendarHeader>
 			<CalendarWeekdays/>
-			{zoomValue === "MONTH" ?
-				focusObj.month.weeks.map(weekData =>
-					<CalendarRow weekData={weekData} key={`Month-${monthData.month}-Week-${weekData.weekNumber}`}/>
-				) : zoomValue === "WEEK" ?
-					<CalendarRow weekData={focusObj.week} key={`Month-${monthData.weeks[focusObj.week.weekNumber].month}-Week-${focusObj.week.weekNumber}`}/>
-				: <CalendarCell dayNum={focusObj.day.day} isWeekend={focusObj.day.isWeekend} key={`Day-${focusObj.day.day}`}/>
-			}
+			<CalendarContent>
+				{zoomValue === "MONTH" ?
+					focusObj.month.weeks.map(weekData =>
+						<CalendarRow weekData={weekData} key={`Month-${monthData.month}-Week-${weekData.weekNumber}`}/>
+					) : zoomValue === "WEEK" ?
+						<CalendarRow weekData={focusObj.week} key={`Month-${monthData.weeks[focusObj.week.weekNumber].month}-Week-${focusObj.week.weekNumber}`}/>
+						: <CalendarCell dayNum={focusObj.day.day} isWeekend={focusObj.day.isWeekend} key={`Day-${focusObj.day.day}`}/>
+				}
+			</CalendarContent>
 		</div>
 	);
 }

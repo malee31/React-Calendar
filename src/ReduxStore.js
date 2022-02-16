@@ -3,7 +3,6 @@ import getMonthData from "./scripts/dateData";
 
 const TODAY = new Date();
 const CURRENT_FOCUS = extractFocus(TODAY);
-const { month: CURRENT_MONTH, week: CURRENT_WEEK, day: CURRENT_DAY } = CURRENT_FOCUS;
 
 const initialState = {
 	today: CURRENT_FOCUS,
@@ -31,9 +30,11 @@ function extractFocus(focusedDate) {
 function rootReducer(state = initialState, action) {
 	switch(action.type) {
 		case "FOCUS":
+			const newFocus = new Date(state.focus.string);
+			newFocus.setMonth(newFocus.getMonth() + action.offset);
 			return {
 				...state,
-				focus: extractFocus(new Date(state.focus.string))
+				focus: extractFocus(newFocus)
 			};
 		case "ZOOM":
 			// TODO: Allow altering whether ["MONTH", "WEEK", "DAY"] are being zoomed in onto
@@ -51,4 +52,5 @@ const store = configureStore({
 	devTools: true
 });
 
+export const { month: CURRENT_MONTH, week: CURRENT_WEEK, day: CURRENT_DAY } = CURRENT_FOCUS;
 export default store;

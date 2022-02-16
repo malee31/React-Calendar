@@ -57,11 +57,11 @@
 	border-width: 0 1px;
 }
 
-.calendar-contents {
+.calendar-content {
 	width: 100%;
-	border-radius: .5rem;
+	display: flex;
+	flex-direction: column;
 	background-color: white;
-	border: 2px solid cornflowerblue;
 	flex-grow: 1;
 }
 
@@ -102,5 +102,5 @@
 
 .calendar-cell-number {
 	justify-content: flex-start;
-	padding: 5%;
+	padding: .75rem;
 }
