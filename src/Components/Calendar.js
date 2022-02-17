@@ -1,7 +1,6 @@
 import "../styles/calendar.css";
 import store from "../ReduxStore";
-import getMonthData from "../scripts/dateData";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 function CalendarCellLayer(props) {
 	const additionalStyle = Object.assign({}, props.style);
@@ -15,8 +14,27 @@ function CalendarCellLayer(props) {
 
 function CalendarCell(props) {
 	const dayNum = props.dayNum ?? -1;
+
+	const focusCell = useCallback(() => {
+		if(!props.dayNum) {
+			return;
+		}
+
+		if(store.getState().zoom === "WEEK") {
+			store.dispatch({
+				type: "ZOOM",
+				zoom: "DAY"
+			});
+		}
+
+		store.dispatch({
+			type: "FOCUS_TO",
+			day: dayNum
+		})
+	}, [props.dayNum]);
+
 	return (
-		<div className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""}`}>
+		<div className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""}`} onClick={focusCell}>
 			<CalendarCellLayer className="calendar-cell-number">
 				<span>{dayNum}</span>
 			</CalendarCellLayer>
@@ -26,8 +44,19 @@ function CalendarCell(props) {
 }
 
 function CalendarRow(props) {
+	const focusRow = useCallback(() => {
+		console.log(`Focus: ${props.weekData.weekNumber}`);
+		console.log(`Zoom: ${store.getState().zoom}`);
+		if(store.getState().zoom === "MONTH") {
+			store.dispatch({
+				type: "ZOOM",
+				zoom: "WEEK"
+			});
+		}
+	}, [props.weekData]);
+
 	return (
-		<div className="calendar-row">
+		<div className="calendar-row" onClick={focusRow}>
 			{props.weekData.days
 				.map((dayData, index) => {
 					if(dayData === null) {
@@ -73,11 +102,13 @@ function CalendarHeader(props) {
 	);
 }
 
-function CalendarWeekdays() {
+function CalendarWeekdays(props) {
 	const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+	const usedDays = props.only ? [weekdays[props.only]] : weekdays;
+
 	return (
 		<div className="calendar-weekdays">
-			{weekdays.map(day =>
+			{usedDays.map(day =>
 				<div key={`${day}-Label`}>
 					{day}
 				</div>
@@ -97,6 +128,8 @@ function CalendarContent(props) {
 export default function Calendar() {
 	const [focusObj, setFocus] = useState(store.getState().focus);
 	const [zoomValue, setZoom] = useState(store.getState().zoom);
+	const monthData = focusObj.month;
+
 	useEffect(() => {
 		return store.subscribe(() => {
 			// console.log("Store state change detected by Calendar");
@@ -106,25 +139,34 @@ export default function Calendar() {
 		});
 	}, []);
 
-	const focus = new Date(focusObj.string);
-	const monthData = focusObj.month;
+	let RenderedContents;
+	// TODO: Allow specifying week or day number
+	switch(zoomValue) {
+		case "DAY":
+			RenderedContents =
+				<CalendarCell dayNum={focusObj.day.day} isWeekend={focusObj.day.isWeekend} key={`Day-${focusObj.day.day}`}/>;
+			break;
+		case "WEEK":
+			RenderedContents =
+				<CalendarRow weekData={focusObj.week} key={`Month-${monthData.month}-Week-${focusObj.week.weekNumber}`}/>;
+			break;
+		case "MONTH":
+			RenderedContents = focusObj.month.weeks.map(weekData =>
+				<CalendarRow weekData={weekData} key={`Month-${monthData.month}-Week-${weekData.weekNumber}`}/>
+			);
+			break;
+		default:
+			RenderedContents = "Invalid Zoom Value";
+	}
 
-	// TODO: Allow specifying week
-	// TODO: Add locale string to month data
 	return (
 		<div className="calendar-wrapper">
 			<CalendarHeader>
-				{focus.toLocaleString("default", { month: "long" })} {focus.getFullYear()}
+				{monthData.monthName} {monthData.year}
 			</CalendarHeader>
-			<CalendarWeekdays/>
+			<CalendarWeekdays only={zoomValue === "DAY" ? focusObj.day.dayNumber : ""}/>
 			<CalendarContent>
-				{zoomValue === "MONTH" ?
-					focusObj.month.weeks.map(weekData =>
-						<CalendarRow weekData={weekData} key={`Month-${monthData.month}-Week-${weekData.weekNumber}`}/>
-					) : zoomValue === "WEEK" ?
-						<CalendarRow weekData={focusObj.week} key={`Month-${monthData.weeks[focusObj.week.weekNumber].month}-Week-${focusObj.week.weekNumber}`}/>
-						: <CalendarCell dayNum={focusObj.day.day} isWeekend={focusObj.day.isWeekend} key={`Day-${focusObj.day.day}`}/>
-				}
+				{RenderedContents}
 			</CalendarContent>
 		</div>
 	);

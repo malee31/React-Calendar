@@ -4,6 +4,7 @@
  * @property {MonthData} [next] MonthData of the next month (without previous or next property)
  * @property {number} year Full year number
  * @property {number} month Month of the year (zero-indexed). Starts with 0 as January
+ * @param {string} monthName Name of the month obtained from the Date object
  * @property {number} daysInMonth Number of days in specified month and year
  * @property {WeekData[]} weeks All the weeks in the month. See WeekData documentation for more format information
  */
@@ -37,6 +38,7 @@ function getMonthData(year, month, includeSurrounding = false) {
 	const monthData = {
 		year: year,
 		month: month,
+		monthName: dateProbe.toLocaleString("default", { month: "long" }),
 		daysInMonth: (new Date(year, month + 1, 0)).getDate(),
 		weeks: []
 	};

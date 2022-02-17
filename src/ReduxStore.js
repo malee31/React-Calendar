@@ -27,6 +27,12 @@ function extractFocus(focusedDate) {
 	};
 }
 
+function amendFocus(currentFocus, day) {
+	const oldFocusDate = new Date(currentFocus.string);
+	oldFocusDate.setDate(day);
+	return extractFocus(oldFocusDate);
+}
+
 function rootReducer(state = initialState, action) {
 	switch(action.type) {
 		case "FOCUS":
@@ -36,11 +42,16 @@ function rootReducer(state = initialState, action) {
 				...state,
 				focus: extractFocus(newFocus)
 			};
+		case "FOCUS_TO":
+			return {
+				...state,
+				focus: amendFocus(state.focus, action.day)
+			};
 		case "ZOOM":
 			// TODO: Allow altering whether ["MONTH", "WEEK", "DAY"] are being zoomed in onto
 			return {
-				zoom: "MONTH",
-				...state
+				...state,
+				zoom: action.zoom
 			};
 		default:
 			return state;
