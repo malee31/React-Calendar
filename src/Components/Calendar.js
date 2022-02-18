@@ -29,8 +29,8 @@ function CalendarCell(props) {
 
 		store.dispatch({
 			type: "FOCUS_TO",
-			day: dayNum
-		})
+			day: props.dayNum
+		});
 	}, [props.dayNum]);
 
 	return (
@@ -47,6 +47,11 @@ function CalendarRow(props) {
 	const focusRow = useCallback(() => {
 		console.log(`Focus: ${props.weekData.weekNumber}`);
 		console.log(`Zoom: ${store.getState().zoom}`);
+		store.dispatch({
+			type: "FOCUS_TO",
+			day: (props.weekData.days.find(day => day && day.dayNumber === store.getState().focus.day.dayNumber) || props.weekData.days.find(day => Boolean(day))).day
+		});
+
 		if(store.getState().zoom === "MONTH") {
 			store.dispatch({
 				type: "ZOOM",
@@ -104,7 +109,7 @@ function CalendarHeader(props) {
 
 function CalendarWeekdays(props) {
 	const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-	const usedDays = props.only ? [weekdays[props.only]] : weekdays;
+	const usedDays = typeof props.only === "number" ? [weekdays[props.only]] : weekdays;
 
 	return (
 		<div className="calendar-weekdays">
