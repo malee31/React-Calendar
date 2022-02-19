@@ -104,3 +104,13 @@
 	justify-content: flex-start;
 	padding: .75rem;
 }
+
+.flex-collapse {
+	overflow: hidden;
+	flex: 0 0 0;
+	transition-duration: .25s;
+	transition-property: flex, border, margin, padding;
+	border: 0;
+	padding: 0;
+	margin: 0;
+}

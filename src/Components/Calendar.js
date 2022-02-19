@@ -34,7 +34,7 @@ function CalendarCell(props) {
 	}, [props.dayNum]);
 
 	return (
-		<div className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""}`} onClick={focusCell}>
+		<div className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""} ${props.collapse ? "flex-collapse" : ""}`} onClick={focusCell}>
 			<CalendarCellLayer className="calendar-cell-number">
 				<span>{dayNum}</span>
 			</CalendarCellLayer>
@@ -61,13 +61,13 @@ function CalendarRow(props) {
 	}, [props.weekData]);
 
 	return (
-		<div className="calendar-row" onClick={focusRow}>
+		<div className={`calendar-row ${props.collapse ? "flex-collapse" : ""}`} onClick={focusRow}>
 			{props.weekData.days
 				.map((dayData, index) => {
 					if(dayData === null) {
-						return <CalendarCell dayNum="" disabled={true} key={`Disabled-${index}`}/>;
+						return <CalendarCell collapse={Boolean(props.dayCollapse)} dayNum="" disabled={true} key={`Disabled-${index}`}/>;
 					} else {
-						return <CalendarCell dayNum={dayData.day} isWeekend={dayData.isWeekend} key={`Day-${dayData.day}`}/>;
+						return <CalendarCell collapse={Boolean(props.dayCollapse) && props.dayCollapse !== dayData} dayNum={dayData.day} isWeekend={dayData.isWeekend} key={`Day-${dayData.day}`}/>;
 					}
 				})
 			}
@@ -144,26 +144,6 @@ export default function Calendar() {
 		});
 	}, []);
 
-	let RenderedContents;
-	// TODO: Allow specifying week or day number
-	switch(zoomValue) {
-		case "DAY":
-			RenderedContents =
-				<CalendarCell dayNum={focusObj.day.day} isWeekend={focusObj.day.isWeekend} key={`Day-${focusObj.day.day}`}/>;
-			break;
-		case "WEEK":
-			RenderedContents =
-				<CalendarRow weekData={focusObj.week} key={`Month-${monthData.month}-Week-${focusObj.week.weekNumber}`}/>;
-			break;
-		case "MONTH":
-			RenderedContents = focusObj.month.weeks.map(weekData =>
-				<CalendarRow weekData={weekData} key={`Month-${monthData.month}-Week-${weekData.weekNumber}`}/>
-			);
-			break;
-		default:
-			RenderedContents = "Invalid Zoom Value";
-	}
-
 	return (
 		<div className="calendar-wrapper">
 			<CalendarHeader>
@@ -171,7 +151,14 @@ export default function Calendar() {
 			</CalendarHeader>
 			<CalendarWeekdays only={zoomValue === "DAY" ? focusObj.day.dayNumber : ""}/>
 			<CalendarContent>
-				{RenderedContents}
+				{focusObj.month.weeks.map(weekData =>
+					<CalendarRow
+						weekData={weekData}
+						key={`Month-${monthData.month}-Week-${weekData.weekNumber}`}
+						collapse={zoomValue !== "MONTH" && weekData !== focusObj.week}
+						dayCollapse={zoomValue === "DAY" ? focusObj.day : false}
+					/>
+				)}
 			</CalendarContent>
 		</div>
 	);
