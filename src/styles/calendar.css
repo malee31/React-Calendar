@@ -40,6 +40,16 @@
 	border-left-width: 1px;
 }
 
+.calendar-controls {
+	width: 100%;
+	height: 3rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	border-top: 1px solid black;
+}
+
 .calendar-weekdays {
 	width: 100%;
 	display: flex;
@@ -63,6 +73,7 @@
 	flex-direction: column;
 	background-color: white;
 	flex: 1 1 100%;
+	overflow: hidden;
 }
 
 .calendar-row {
@@ -105,11 +116,15 @@
 	padding: .75rem;
 }
 
+.flex-collapsible, .flex-collapse {
+	transition-duration: .4s;
+	transition-property: flex, border, margin, padding;
+}
+
 .flex-collapse {
 	overflow: hidden;
-	flex: 0 0 0;
-	transition-duration: .25s;
-	transition-property: flex, border, margin, padding;
+	flex-grow: 0;
+	flex-basis: 0;
 	border: 0;
 	padding: 0;
 	margin: 0;

@@ -34,7 +34,7 @@ function CalendarCell(props) {
 	}, [props.dayNum]);
 
 	return (
-		<div className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""} ${props.collapse ? "flex-collapse" : ""}`} onClick={focusCell}>
+		<div className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""} ${props.collapse ? "flex-collapse" : "flex-collapsible"}`} onClick={focusCell}>
 			<CalendarCellLayer className="calendar-cell-number">
 				<span>{dayNum}</span>
 			</CalendarCellLayer>
@@ -61,13 +61,13 @@ function CalendarRow(props) {
 	}, [props.weekData]);
 
 	return (
-		<div className={`calendar-row ${props.collapse ? "flex-collapse" : ""}`} onClick={focusRow}>
+		<div className={`calendar-row ${props.collapse ? "flex-collapse" : "flex-collapsible"}`} onClick={focusRow}>
 			{props.weekData.days
 				.map((dayData, index) => {
 					if(dayData === null) {
-						return <CalendarCell collapse={Boolean(props.dayCollapse)} dayNum="" disabled={true} key={`Disabled-${index}`}/>;
+						return <CalendarCell collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayNum="" disabled={true} key={`Disabled-${index}`}/>;
 					} else {
-						return <CalendarCell collapse={Boolean(props.dayCollapse) && props.dayCollapse !== dayData} dayNum={dayData.day} isWeekend={dayData.isWeekend} key={`Day-${dayData.day}`}/>;
+						return <CalendarCell collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayNum={dayData.day} isWeekend={dayData.isWeekend} key={`Day-${dayData.day}`}/>;
 					}
 				})
 			}
@@ -109,12 +109,11 @@ function CalendarHeader(props) {
 
 function CalendarWeekdays(props) {
 	const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-	const usedDays = typeof props.only === "number" ? [weekdays[props.only]] : weekdays;
 
 	return (
 		<div className="calendar-weekdays">
-			{usedDays.map(day =>
-				<div key={`${day}-Label`}>
+			{weekdays.map((day, index) =>
+				<div key={`${day}-Label`} className={weekdays[props.only] && weekdays[props.only] !== day ? "flex-collapse" : "flex-collapsible"}>
 					{day}
 				</div>
 			)}
@@ -122,10 +121,27 @@ function CalendarWeekdays(props) {
 	);
 }
 
-function CalendarContent(props) {
+function CalendarControls() {
+	// store.getState();
+	const [currentZoom, setZoom] = useState(store.getState().zoom);
+	useEffect(() => {
+		return store.subscribe(() => {
+			setZoom(store.getState().zoom);
+		});
+	}, []);
+	const updateZoom = useCallback(() => {
+		store.dispatch({
+			type: "ZOOM",
+			zoom: "MONTH"
+		});
+	}, []);
+
+	const zoomTitleCase = currentZoom[0].toUpperCase() + currentZoom.toLowerCase().slice(1);
 	return (
-		<div className="calendar-content">
-			{props.children}
+		<div className="calendar-controls">
+			<div className="calendar-zoom-control" onClick={updateZoom}>
+				{zoomTitleCase}
+			</div>
 		</div>
 	);
 }
@@ -149,8 +165,9 @@ export default function Calendar() {
 			<CalendarHeader>
 				{monthData.monthName} {monthData.year}
 			</CalendarHeader>
+			<CalendarControls/>
 			<CalendarWeekdays only={zoomValue === "DAY" ? focusObj.day.dayNumber : ""}/>
-			<CalendarContent>
+			<div className="calendar-content">
 				{focusObj.month.weeks.map(weekData =>
 					<CalendarRow
 						weekData={weekData}
@@ -159,7 +176,7 @@ export default function Calendar() {
 						dayCollapse={zoomValue === "DAY" ? focusObj.day : false}
 					/>
 				)}
-			</CalendarContent>
+			</div>
 		</div>
 	);
 }
