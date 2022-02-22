@@ -50,6 +50,31 @@
 	border-top: 1px solid black;
 }
 
+.calendar-zoom-control {
+	position: relative;
+	width: 6rem;
+	height: 80%;
+	border-radius: .5rem;
+	border: 1px solid white;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+	cursor: pointer;
+}
+
+.calendar-zoom-control-dropdown {
+	position: absolute;
+	width: 100%;
+	top: 100%;
+	background-color: white;
+	z-index: 1;
+	border: 1px solid cornflowerblue;
+}
+
+.calendar-zoom-control-dropdown > * {
+}
+
 .calendar-weekdays {
 	width: 100%;
 	display: flex;

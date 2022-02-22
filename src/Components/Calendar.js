@@ -75,23 +75,20 @@ function CalendarRow(props) {
 	);
 }
 
-function decrementMonth() {
-	// console.log("Month Decremented");
-	store.dispatch({
-		type: "FOCUS",
-		offset: -1
-	});
-}
-
-function incrementMonth() {
-	// console.log("Month Incremented");
-	store.dispatch({
-		type: "FOCUS",
-		offset: 1
-	});
-}
-
 function CalendarHeader(props) {
+	const decrementMonth = useCallback(() => {
+		store.dispatch({
+			type: "FOCUS",
+			offset: -1
+		});
+	}, []);
+	const incrementMonth = useCallback(() => {
+		store.dispatch({
+			type: "FOCUS",
+			offset: 1
+		});
+	}, []);
+
 	return (
 		<div className="calendar-header">
 			<div className="calendar-header-controls-left" onClick={decrementMonth}>
@@ -124,23 +121,45 @@ function CalendarWeekdays(props) {
 function CalendarControls() {
 	// store.getState();
 	const [currentZoom, setZoom] = useState(store.getState().zoom);
+	const [showDropdown, setShow] = useState(false);
 	useEffect(() => {
 		return store.subscribe(() => {
 			setZoom(store.getState().zoom);
 		});
 	}, []);
-	const updateZoom = useCallback(() => {
+	const toggleShow = useCallback(() => {
+		setShow(!showDropdown);
+	}, [showDropdown]);
+	const zoomMonth = useCallback(() => {
 		store.dispatch({
 			type: "ZOOM",
 			zoom: "MONTH"
+		});
+	}, []);
+	const zoomWeek = useCallback(() => {
+		store.dispatch({
+			type: "ZOOM",
+			zoom: "WEEK"
+		});
+	}, []);
+	const zoomDay = useCallback(() => {
+		store.dispatch({
+			type: "ZOOM",
+			zoom: "DAY"
 		});
 	}, []);
 
 	const zoomTitleCase = currentZoom[0].toUpperCase() + currentZoom.toLowerCase().slice(1);
 	return (
 		<div className="calendar-controls">
-			<div className="calendar-zoom-control" onClick={updateZoom}>
-				{zoomTitleCase}
+			<div className="calendar-zoom-control">
+				<span onClick={toggleShow}>{zoomTitleCase}</span>
+				{showDropdown ?
+					<div className="calendar-zoom-control-dropdown">
+						<div onClick={zoomMonth}>Month</div>
+						<div onClick={zoomWeek}>Week</div>
+						<div onClick={zoomDay}>Day</div>
+					</div> : null}
 			</div>
 		</div>
 	);
