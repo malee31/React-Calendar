@@ -17,6 +17,15 @@ const initialState = {
  */
 function extractFocus(focusedDate) {
 	const focusedMonth = getMonthData(focusedDate.getFullYear(), focusedDate.getMonth(), false);
+	return extractFocusFromData(focusedDate, focusedMonth);
+}
+
+/**
+ * Arranges focused MonthData into a focus object given a Date object
+ * @param {Date} focusedDate Date object to focus on
+ * @param {MonthData} focusedMonth MonthData to convert into a focus object. Must be in the same month as focusedDate
+ */
+function extractFocusFromData(focusedDate, focusedMonth) {
 	const focusedWeek = focusedMonth.weeks.find(weekData => weekData.days.some(dayData => dayData?.day === focusedDate.getDate()));
 	const focusedDay = focusedWeek.days.find(dayData => dayData?.day === focusedDate.getDate());
 	return {
@@ -27,10 +36,14 @@ function extractFocus(focusedDate) {
 	};
 }
 
+/**
+ * Changes the day of the month focused onto. Reuses old focus data wrapped in a new object instance to assure referential equality
+ * @param currentFocus
+ * @param day
+ */
 function amendFocus(currentFocus, day) {
 	const oldFocusDate = new Date(currentFocus.string);
-	oldFocusDate.setDate(day);
-	return extractFocus(oldFocusDate);
+	return extractFocusFromData(oldFocusDate, currentFocus.month);
 }
 
 function rootReducer(state = initialState, action) {

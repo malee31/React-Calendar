@@ -1,6 +1,7 @@
 import "../styles/calendar.css";
 import store from "../ReduxStore";
-import { useCallback, useEffect, useState } from "react";
+import Dispatcher from "../ReduxDispatcher";
+import { useEffect, useState } from "react";
 
 function CalendarCellLayer(props) {
 	const additionalStyle = Object.assign({}, props.style);
@@ -15,10 +16,15 @@ function CalendarCellLayer(props) {
 function CalendarCell(props) {
 	const dayNum = props.dayNum ?? -1;
 
-	const focusCell = useCallback(() => {
+	const focusCell = () => {
 		if(!props.dayNum) {
 			return;
 		}
+
+		store.dispatch({
+			type: "FOCUS_TO",
+			day: props.dayNum
+		});
 
 		if(store.getState().zoom === "WEEK") {
 			store.dispatch({
@@ -26,15 +32,13 @@ function CalendarCell(props) {
 				zoom: "DAY"
 			});
 		}
-
-		store.dispatch({
-			type: "FOCUS_TO",
-			day: props.dayNum
-		});
-	}, [props.dayNum]);
+	};
 
 	return (
-		<div className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""} ${props.collapse ? "flex-collapse" : "flex-collapsible"}`} onClick={focusCell}>
+		<div
+			className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""} ${props.collapse ? "flex-collapse" : "flex-collapsible"}`}
+			onClick={focusCell}
+		>
 			<CalendarCellLayer className="calendar-cell-number">
 				<span>{dayNum}</span>
 			</CalendarCellLayer>
@@ -44,7 +48,7 @@ function CalendarCell(props) {
 }
 
 function CalendarRow(props) {
-	const focusRow = useCallback(() => {
+	const focusRow = () => {
 		console.log(`Focus: ${props.weekData.weekNumber}`);
 		console.log(`Zoom: ${store.getState().zoom}`);
 		store.dispatch({
@@ -58,7 +62,7 @@ function CalendarRow(props) {
 				zoom: "WEEK"
 			});
 		}
-	}, [props.weekData]);
+	}
 
 	return (
 		<div className={`calendar-row ${props.collapse ? "flex-collapse" : "flex-collapsible"}`} onClick={focusRow}>
@@ -76,18 +80,18 @@ function CalendarRow(props) {
 }
 
 function CalendarHeader(props) {
-	const decrementMonth = useCallback(() => {
+	const decrementMonth = () => {
 		store.dispatch({
 			type: "FOCUS",
 			offset: -1
 		});
-	}, []);
-	const incrementMonth = useCallback(() => {
+	};
+	const incrementMonth = () => {
 		store.dispatch({
 			type: "FOCUS",
 			offset: 1
 		});
-	}, []);
+	};
 
 	return (
 		<div className="calendar-header">
@@ -109,7 +113,7 @@ function CalendarWeekdays(props) {
 
 	return (
 		<div className="calendar-weekdays">
-			{weekdays.map((day, index) =>
+			{weekdays.map((day,) =>
 				<div key={`${day}-Label`} className={weekdays[props.only] && weekdays[props.only] !== day ? "flex-collapse" : "flex-collapsible"}>
 					{day}
 				</div>
@@ -119,7 +123,6 @@ function CalendarWeekdays(props) {
 }
 
 function CalendarControls() {
-	// store.getState();
 	const [currentZoom, setZoom] = useState(store.getState().zoom);
 	const [showDropdown, setShow] = useState(false);
 	useEffect(() => {
@@ -127,38 +130,17 @@ function CalendarControls() {
 			setZoom(store.getState().zoom);
 		});
 	}, []);
-	const toggleShow = useCallback(() => {
-		setShow(!showDropdown);
-	}, [showDropdown]);
-	const zoomMonth = useCallback(() => {
-		store.dispatch({
-			type: "ZOOM",
-			zoom: "MONTH"
-		});
-	}, []);
-	const zoomWeek = useCallback(() => {
-		store.dispatch({
-			type: "ZOOM",
-			zoom: "WEEK"
-		});
-	}, []);
-	const zoomDay = useCallback(() => {
-		store.dispatch({
-			type: "ZOOM",
-			zoom: "DAY"
-		});
-	}, []);
 
 	const zoomTitleCase = currentZoom[0].toUpperCase() + currentZoom.toLowerCase().slice(1);
 	return (
 		<div className="calendar-controls">
 			<div className="calendar-zoom-control">
-				<span onClick={toggleShow}>{zoomTitleCase}</span>
+				<span onClick={() => setShow(!showDropdown)}>{zoomTitleCase}</span>
 				{showDropdown ?
 					<div className="calendar-zoom-control-dropdown">
-						<div onClick={zoomMonth}>Month</div>
-						<div onClick={zoomWeek}>Week</div>
-						<div onClick={zoomDay}>Day</div>
+						<div onClick={() => Dispatcher.Zoom("MONTH")}>Month</div>
+						<div onClick={() => Dispatcher.Zoom("WEEK")}>Week</div>
+						<div onClick={() => Dispatcher.Zoom("DAY")}>Day</div>
 					</div> : null}
 			</div>
 		</div>
