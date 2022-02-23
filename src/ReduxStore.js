@@ -11,7 +11,7 @@ const initialState = {
 };
 
 /**
- * Obtains the full objects used to focus on
+ * Creates a fresh focus object from a date. Only use when initializing or changing months
  * @param {Date} focusedDate Date object to focus on
  * @returns {Object} Contains focused MonthData, WeekData, and DayData
  */
@@ -43,6 +43,7 @@ function extractFocusFromData(focusedDate, focusedMonth) {
  */
 function amendFocus(currentFocus, day) {
 	const oldFocusDate = new Date(currentFocus.string);
+	oldFocusDate.setDate(day);
 	return extractFocusFromData(oldFocusDate, currentFocus.month);
 }
 

@@ -69,10 +69,16 @@
 	top: 100%;
 	background-color: white;
 	z-index: 1;
-	border: 1px solid cornflowerblue;
+	user-select: none;
 }
 
 .calendar-zoom-control-dropdown > * {
+	min-height: 1.75rem;
+	border: 1px solid darkgray;
+}
+
+.calendar-zoom-control-dropdown > *:hover {
+	background-color: lightgray;
 }
 
 .calendar-weekdays {
