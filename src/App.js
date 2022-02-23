@@ -6,7 +6,7 @@ import './styles/App.css';
 function App() {
 	return (
 		<Provider store={ReduxStore}>
-			<div className="App">
+			<div className="App disable-select">
 				<main>
 					<Calendar/>
 				</main>

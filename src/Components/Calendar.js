@@ -22,15 +22,12 @@ function CalendarCell(props) {
 		}
 
 		store.dispatch({
-			type: "FOCUS_TO",
+			type: "FOCUS_DAY",
 			day: props.dayNum
 		});
 
 		if(store.getState().zoom === "WEEK") {
-			store.dispatch({
-				type: "ZOOM",
-				zoom: "DAY"
-			});
+			Dispatcher.Zoom("DAY");
 		}
 	};
 
@@ -52,15 +49,12 @@ function CalendarRow(props) {
 		console.log(`Focus: ${props.weekData.weekNumber}`);
 		console.log(`Zoom: ${store.getState().zoom}`);
 		store.dispatch({
-			type: "FOCUS_TO",
+			type: "FOCUS_DAY",
 			day: (props.weekData.days.find(day => day && day.dayNumber === store.getState().focus.day.dayNumber) || props.weekData.days.find(day => Boolean(day))).day
 		});
 
 		if(store.getState().zoom === "MONTH") {
-			store.dispatch({
-				type: "ZOOM",
-				zoom: "WEEK"
-			});
+			Dispatcher.Zoom("WEEK");
 		}
 	}
 
@@ -81,15 +75,13 @@ function CalendarRow(props) {
 
 function CalendarHeader(props) {
 	const decrementMonth = () => {
-		store.dispatch({
-			type: "FOCUS",
-			offset: -1
+		Dispatcher.Focus({
+			month: -1
 		});
 	};
 	const incrementMonth = () => {
-		store.dispatch({
-			type: "FOCUS",
-			offset: 1
+		Dispatcher.Focus({
+			month: 1
 		});
 	};
 

@@ -10,3 +10,17 @@ body {
 main {
 	height: 100vh
 }
+
+.disable-select {
+	user-select: none;
+	-ms-user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+}
+
+.enable-select {
+	user-select: initial;
+	-ms-user-select: initial;
+	-moz-user-select: initial;
+	-webkit-user-select: initial;
+}

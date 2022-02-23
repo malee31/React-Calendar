@@ -50,13 +50,12 @@ function amendFocus(currentFocus, day) {
 function rootReducer(state = initialState, action) {
 	switch(action.type) {
 		case "FOCUS":
-			const newFocus = new Date(state.focus.string);
-			newFocus.setMonth(newFocus.getMonth() + action.offset);
+			const newFocus = new Date(action.focusString);
 			return {
 				...state,
 				focus: extractFocus(newFocus)
 			};
-		case "FOCUS_TO":
+		case "FOCUS_DAY":
 			return {
 				...state,
 				focus: amendFocus(state.focus, action.day)
