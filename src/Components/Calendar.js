@@ -46,8 +46,6 @@ function CalendarCell(props) {
 
 function CalendarRow(props) {
 	const focusRow = () => {
-		console.log(`Focus: ${props.weekData.weekNumber}`);
-		console.log(`Zoom: ${store.getState().zoom}`);
 		store.dispatch({
 			type: "FOCUS_DAY",
 			day: (props.weekData.days.find(day => day && day.dayNumber === store.getState().focus.day.dayNumber) || props.weekData.days.find(day => Boolean(day))).day
@@ -74,26 +72,22 @@ function CalendarRow(props) {
 }
 
 function CalendarHeader(props) {
-	const decrementMonth = () => {
-		Dispatcher.Focus({
-			month: -1
-		});
-	};
-	const incrementMonth = () => {
-		Dispatcher.Focus({
-			month: 1
-		});
-	};
+	const zoom = store.getState().zoom;
+	const offset = {
+		month: zoom === "MONTH" ? 1 : 0,
+		week: zoom === "WEEK" ? 1 : 0,
+		day: zoom === "DAY" ? 1 : 0
+	}
 
 	return (
 		<div className="calendar-header">
-			<div className="calendar-header-controls-left" onClick={decrementMonth}>
+			<div className="calendar-header-controls-left" onClick={() => Dispatcher.Focus({ month: -offset.month, week: -offset.week, day: -offset.day })}>
 				&lt;
 			</div>
 			<div>
 				{props.children}
 			</div>
-			<div className="calendar-header-controls-right" onClick={incrementMonth}>
+			<div className="calendar-header-controls-right" onClick={() => Dispatcher.Focus(offset)}>
 				&gt;
 			</div>
 		</div>
@@ -123,6 +117,11 @@ function CalendarControls() {
 		});
 	}, []);
 
+	const set = level => {
+		Dispatcher.Zoom(level);
+		setShow(false);
+	};
+
 	const zoomTitleCase = currentZoom[0].toUpperCase() + currentZoom.toLowerCase().slice(1);
 	return (
 		<div className="calendar-controls">
@@ -130,9 +129,9 @@ function CalendarControls() {
 				<span onClick={() => setShow(!showDropdown)}>{zoomTitleCase}</span>
 				{showDropdown ?
 					<div className="calendar-zoom-control-dropdown">
-						<div onClick={() => Dispatcher.Zoom("MONTH")}>Month</div>
-						<div onClick={() => Dispatcher.Zoom("WEEK")}>Week</div>
-						<div onClick={() => Dispatcher.Zoom("DAY")}>Day</div>
+						<div onClick={() => set("MONTH")}>Month</div>
+						<div onClick={() => set("WEEK")}>Week</div>
+						<div onClick={() => set("DAY")}>Day</div>
 					</div> : null}
 			</div>
 		</div>
@@ -146,7 +145,6 @@ export default function Calendar() {
 
 	useEffect(() => {
 		return store.subscribe(() => {
-			// console.log("Store state change detected by Calendar");
 			// TODO: Check to make sure unchanged values don't fire a re-render
 			setFocus(store.getState().focus);
 			setZoom(store.getState().zoom);
