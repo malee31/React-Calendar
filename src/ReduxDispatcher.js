@@ -12,7 +12,7 @@ function Zoom(level) {
 }
 
 /**
- *
+ * Changes the focus based on an offset object. Attempts to reuse month data where possible to preserve referential equality
  * @param {Object} [baseOffset] Contains the number of years, months, weeks, and days to offset by
  * @constructor
  */

@@ -2,47 +2,7 @@ import "../styles/calendar.css";
 import store from "../ReduxStore";
 import Dispatcher from "../ReduxDispatcher";
 import { useEffect, useState } from "react";
-
-function CalendarCellLayer(props) {
-	const additionalStyle = Object.assign({}, props.style);
-	const additionalClasses = props.className || "";
-	return (
-		<div className={`calendar-cell-layer ${additionalClasses}`} style={additionalStyle}>
-			{props.children}
-		</div>
-	);
-}
-
-function CalendarCell(props) {
-	const dayNum = props.dayNum ?? -1;
-
-	const focusCell = () => {
-		if(!props.dayNum) {
-			return;
-		}
-
-		store.dispatch({
-			type: "FOCUS_DAY",
-			day: props.dayNum
-		});
-
-		if(store.getState().zoom === "WEEK") {
-			Dispatcher.Zoom("DAY");
-		}
-	};
-
-	return (
-		<div
-			className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""} ${props.collapse ? "flex-collapse" : "flex-collapsible"}`}
-			onClick={focusCell}
-		>
-			<CalendarCellLayer className="calendar-cell-number">
-				<span>{dayNum}</span>
-			</CalendarCellLayer>
-			<CalendarCellLayer/>
-		</div>
-	);
-}
+import CalendarCell from "./CalendarCells";
 
 function CalendarRow(props) {
 	const focusRow = () => {
@@ -73,6 +33,7 @@ function CalendarRow(props) {
 
 function CalendarHeader(props) {
 	const zoom = store.getState().zoom;
+	// TODO: Fix wrapping months when offsetting by weeks
 	const offset = {
 		month: zoom === "MONTH" ? 1 : 0,
 		week: zoom === "WEEK" ? 1 : 0,
@@ -81,7 +42,11 @@ function CalendarHeader(props) {
 
 	return (
 		<div className="calendar-header">
-			<div className="calendar-header-controls-left" onClick={() => Dispatcher.Focus({ month: -offset.month, week: -offset.week, day: -offset.day })}>
+			<div className="calendar-header-controls-left" onClick={() => Dispatcher.Focus({
+				month: -offset.month,
+				week: -offset.week,
+				day: -offset.day
+			})}>
 				&lt;
 			</div>
 			<div>
