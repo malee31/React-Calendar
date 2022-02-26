@@ -1,4 +1,5 @@
 import "../styles/calendar.css";
+import "../styles/calendarCell.css";
 import store from "../ReduxStore";
 import Dispatcher from "../ReduxDispatcher";
 
@@ -30,15 +31,25 @@ function CalendarCell(props) {
 		}
 	};
 
+	if(props.disabled) {
+		return <div
+			className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""} ${props.collapse ? "flex-collapse" : "flex-collapsible"}`}
+		/>;
+	}
+
 	return (
 		<div
-			className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""} ${props.collapse ? "flex-collapse" : "flex-collapsible"}`}
+			className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.collapse ? "flex-collapse" : "flex-collapsible"}`}
 			onClick={focusCell}
 		>
-			<CalendarCellLayer className="calendar-cell-number">
-				<span>{dayNum}</span>
+			<CalendarCellLayer className="calendar-event-layer">
+				<div className="calendar-cell-number">{dayNum}</div>
+				<div className="calendar-event-container">
+					<div className="calendar-event-entry">
+						Sample Event
+					</div>
+				</div>
 			</CalendarCellLayer>
-			<CalendarCellLayer/>
 		</div>
 	);
 }

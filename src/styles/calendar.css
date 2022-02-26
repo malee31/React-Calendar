@@ -124,29 +124,6 @@
 	overflow: hidden;
 }
 
-.calendar-cell.weekend {
-	background-color: lightgray;
-}
-
-.calendar-cell.disabled {
-	background-color: gray;
-}
-
-.calendar-cell-layer {
-	display: flex;
-	flex-grow: 1;
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-}
-
-.calendar-cell-number {
-	justify-content: flex-start;
-	padding: .75rem;
-}
-
 .flex-collapsible, .flex-collapse {
 	transition-duration: .4s;
 	transition-property: flex, border, margin, padding;
