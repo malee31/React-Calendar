@@ -41,8 +41,8 @@
 	align-items: center;
 	width: 100%;
 	min-height: 1.5rem;
-	background-color: white;
-	border: 1px solid cornflowerblue;
+	background-color: #FFF;
+	border: 1px solid #6495ED;
 	border-radius: .5rem;
 	padding: 0 .5rem;
 }

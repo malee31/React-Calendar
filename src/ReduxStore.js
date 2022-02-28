@@ -1,6 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import getMonthData from "./scripts/dateData";
 
+/**
+ * @typedef FocusData
+ * @property {MonthData} month Focused month data
+ * @property {WeekData} week Focused week data
+ * @property {DayData} day Focused day data
+ * @property {string} string The focused date as a string outputted by Date.toString()
+ */
+
 const TODAY = new Date();
 const CURRENT_FOCUS = extractFocus(TODAY);
 
@@ -13,7 +21,7 @@ const initialState = {
 /**
  * Creates a fresh focus object from a date. Only use when initializing or changing months
  * @param {Date} focusedDate Date object to focus on
- * @returns {Object} Contains focused MonthData, WeekData, and DayData
+ * @returns {FocusData} Contains the focus data extracted from focusedDate
  */
 function extractFocus(focusedDate) {
 	const focusedMonth = getMonthData(focusedDate.getFullYear(), focusedDate.getMonth(), false);
@@ -24,6 +32,7 @@ function extractFocus(focusedDate) {
  * Arranges focused MonthData into a focus object given a Date object
  * @param {Date} focusedDate Date object to focus on
  * @param {MonthData} focusedMonth MonthData to convert into a focus object. Must be in the same month as focusedDate
+ * @return {FocusData} Contains the focus data extracted from focusedDate
  */
 function extractFocusFromData(focusedDate, focusedMonth) {
 	const focusedWeek = focusedMonth.weeks.find(weekData => weekData.days.some(dayData => dayData?.day === focusedDate.getDate()));
@@ -38,8 +47,9 @@ function extractFocusFromData(focusedDate, focusedMonth) {
 
 /**
  * Changes the day of the month focused onto. Reuses old focus data wrapped in a new object instance to assure referential equality
- * @param currentFocus
- * @param day
+ * @param {FocusData} currentFocus The currently focused month
+ * @param {number} day Day of the month to focus onto
+ * @return {FocusData} Contains the focus data extracted from focusedDate
  */
 function amendFocus(currentFocus, day) {
 	const oldFocusDate = new Date(currentFocus.string);
