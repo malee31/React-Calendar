@@ -4,6 +4,14 @@ import Dispatcher from "../ReduxDispatcher";
 import { useEffect, useState } from "react";
 import CalendarCell from "./CalendarCells";
 
+/**
+ * Creates and manages a row/week in the calendar
+ * @param {boolean} [props.collapse=false] When set to true, the row collapses vertically to a height of 0
+ * @param {WeekData} props.weekData WeekData to render for the row
+ * @param {DayData|false} [props.dayCollapse] If set to a DayData object, all days of the week will be collapsed except for the day that has a matching day of week value
+ * @return {JSX.Element}
+ * @constructor
+ */
 function CalendarRow(props) {
 	const focusRow = () => {
 		store.dispatch({
@@ -31,6 +39,12 @@ function CalendarRow(props) {
 	);
 }
 
+/**
+ * Contains the month label and controls for the calendar
+ * @param {JSX.Element|string} [props.children] The label in the center of the header
+ * @return {JSX.Element}
+ * @constructor
+ */
 function CalendarHeader(props) {
 	const zoom = store.getState().zoom;
 	// TODO: Fix wrapping months when offsetting by weeks
@@ -59,6 +73,12 @@ function CalendarHeader(props) {
 	);
 }
 
+/**
+ * Contains labels for the days of the week
+ * @param {number} [props.only] If set to a number between 0-6, only the label for that day of the week will be shown while the others will be collapsed
+ * @return {JSX.Element}
+ * @constructor
+ */
 function CalendarWeekdays(props) {
 	const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -73,6 +93,11 @@ function CalendarWeekdays(props) {
 	);
 }
 
+/**
+ * Contains the control for changing the zoom level of the calendar
+ * @return {JSX.Element}
+ * @constructor
+ */
 function CalendarControls() {
 	const [currentZoom, setZoom] = useState(store.getState().zoom);
 	const [showDropdown, setShow] = useState(false);
@@ -103,6 +128,11 @@ function CalendarControls() {
 	);
 }
 
+/**
+ * Top level container for all Calendar components
+ * @return {JSX.Element}
+ * @constructor
+ */
 export default function Calendar() {
 	const [focusObj, setFocus] = useState(store.getState().focus);
 	const [zoomValue, setZoom] = useState(store.getState().zoom);
