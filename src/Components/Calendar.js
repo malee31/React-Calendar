@@ -9,6 +9,7 @@ import CalendarCell from "./CalendarCells";
  * @param {boolean} [props.collapse=false] When set to true, the row collapses vertically to a height of 0
  * @param {WeekData} props.weekData WeekData to render for the row
  * @param {DayData|false} [props.dayCollapse] If set to a DayData object, all days of the week will be collapsed except for the day that has a matching day of week value
+ * @param {boolean} [props.focused] Whether this week is the focused week
  * @return {JSX.Element}
  * @constructor
  */
@@ -25,7 +26,7 @@ function CalendarRow(props) {
 	}
 
 	return (
-		<div className={`calendar-row ${props.collapse ? "flex-collapse" : "flex-collapsible"}`} onClick={focusRow}>
+		<div className={`calendar-row ${props.collapse ? "flex-collapse" : "flex-collapsible"} ${props.focused ? "focused-week" : ""}`} onClick={focusRow}>
 			{props.weekData.days
 				.map((dayData, index) => {
 					if(dayData === null) {
@@ -153,12 +154,13 @@ export default function Calendar() {
 			</CalendarHeader>
 			<CalendarControls/>
 			<CalendarWeekdays only={zoomValue === "DAY" ? focusObj.day.dayNumber : ""}/>
-			<div className="calendar-content">
+			<div className={`calendar-content zoom-level-${zoomValue.toLowerCase()}`}>
 				{focusObj.month.weeks.map(weekData =>
 					<CalendarRow
 						weekData={weekData}
 						key={`Month-${monthData.month}-Week-${weekData.weekNumber}`}
 						collapse={zoomValue !== "MONTH" && weekData !== focusObj.week}
+						focused={weekData === focusObj.week}
 						dayCollapse={zoomValue === "DAY" ? focusObj.day : false}
 					/>
 				)}
