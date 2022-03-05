@@ -32,7 +32,7 @@ function CalendarRow(props) {
 					if(dayData === null) {
 						return <CalendarCell collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayNum="" disabled={true} key={`Disabled-${index}`}/>;
 					} else {
-						return <CalendarCell collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayNum={dayData.day} isWeekend={dayData.isWeekend} key={`Day-${dayData.day}`}/>;
+						return <CalendarCell focused={store.getState().focus.day === dayData} collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayNum={dayData.day} isWeekend={dayData.isWeekend} key={`Day-${dayData.day}`}/>;
 					}
 				})
 			}

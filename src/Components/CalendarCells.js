@@ -39,7 +39,7 @@ function CalendarCell(props) {
 
 	return (
 		<div
-			className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.collapse ? "flex-collapse" : "flex-collapsible"}`}
+			className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.collapse ? "flex-collapse" : "flex-collapsible"} ${props.focused ? "focused-day" : ""}`}
 			onClick={focusCell}
 		>
 			<CalendarCellLayer className="calendar-event-layer">
