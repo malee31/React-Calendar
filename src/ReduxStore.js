@@ -87,6 +87,16 @@ function rootReducer(state = initialState, action) {
 	}
 }
 
+
+/**
+ * Short for readState. A shorthand for store.getState()
+ * @return {*} Returns the entire state from store.getState() or the value stored in the state with the specified key
+ */
+export function rState(key) {
+	const currentState = store.getState();
+	return key ? currentState[key] : currentState;
+}
+
 const store = configureStore({
 	reducer: rootReducer,
 	devTools: true

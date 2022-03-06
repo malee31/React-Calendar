@@ -1,4 +1,4 @@
-import store from "./ReduxStore";
+import store, {rState} from "./ReduxStore";
 
 /**
  * Changes the zoom level of the calendar
@@ -24,7 +24,7 @@ function Focus(baseOffset) {
 		day: 0,
 		...baseOffset
 	};
-	const oldFocus = store.getState().focus;
+	const oldFocus = rState().focus;
 	const newFocus = new Date(oldFocus.string);
 	newFocus.setFullYear(oldFocus.month.year + offset.year);
 	newFocus.setMonth(oldFocus.month.month + offset.month);

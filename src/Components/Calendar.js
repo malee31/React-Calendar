@@ -1,5 +1,5 @@
 import "../styles/calendar.css";
-import store from "../ReduxStore";
+import store, {rState} from "../ReduxStore";
 import Dispatcher from "../ReduxDispatcher";
 import { useEffect, useState } from "react";
 import CalendarCell from "./CalendarCells";
@@ -17,10 +17,10 @@ function CalendarRow(props) {
 	const focusRow = () => {
 		store.dispatch({
 			type: "FOCUS_DAY",
-			day: (props.weekData.days.find(day => day && day.dayNumber === store.getState().focus.day.dayNumber) || props.weekData.days.find(day => Boolean(day))).day
+			day: (props.weekData.days.find(day => day && day.dayNumber === rState().focus.day.dayNumber) || props.weekData.days.find(day => Boolean(day))).day
 		});
 
-		if(store.getState().zoom === "MONTH") {
+		if(rState().zoom === "MONTH") {
 			Dispatcher.Zoom("WEEK");
 		}
 	}
@@ -32,7 +32,7 @@ function CalendarRow(props) {
 					if(dayData === null) {
 						return <CalendarCell collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayNum="" disabled={true} key={`Disabled-${index}`}/>;
 					} else {
-						return <CalendarCell focused={store.getState().focus.day === dayData} collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayNum={dayData.day} isWeekend={dayData.isWeekend} key={`Day-${dayData.day}`}/>;
+						return <CalendarCell focused={rState().focus.day === dayData} collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayNum={dayData.day} isWeekend={dayData.isWeekend} key={`Day-${dayData.day}`}/>;
 					}
 				})
 			}
@@ -47,7 +47,7 @@ function CalendarRow(props) {
  * @constructor
  */
 function CalendarHeader(props) {
-	const zoom = store.getState().zoom;
+	const zoom = rState().zoom;
 	// TODO: Fix wrapping months when offsetting by weeks
 	const offset = {
 		month: zoom === "MONTH" ? 1 : 0,
@@ -100,11 +100,11 @@ function CalendarWeekdays(props) {
  * @constructor
  */
 function CalendarControls() {
-	const [currentZoom, setZoom] = useState(store.getState().zoom);
+	const [currentZoom, setZoom] = useState(rState().zoom);
 	const [showDropdown, setShow] = useState(false);
 	useEffect(() => {
 		return store.subscribe(() => {
-			setZoom(store.getState().zoom);
+			setZoom(rState().zoom);
 		});
 	}, []);
 
@@ -135,15 +135,15 @@ function CalendarControls() {
  * @constructor
  */
 export default function Calendar() {
-	const [focusObj, setFocus] = useState(store.getState().focus);
-	const [zoomValue, setZoom] = useState(store.getState().zoom);
+	const [focusObj, setFocus] = useState(rState().focus);
+	const [zoomValue, setZoom] = useState(rState().zoom);
 	const monthData = focusObj.month;
 
 	useEffect(() => {
 		return store.subscribe(() => {
 			// TODO: Check to make sure unchanged values don't fire a re-render
-			setFocus(store.getState().focus);
-			setZoom(store.getState().zoom);
+			setFocus(rState().focus);
+			setZoom(rState().zoom);
 		});
 	}, []);
 

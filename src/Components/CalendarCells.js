@@ -1,6 +1,6 @@
 import "../styles/calendar.css";
 import "../styles/calendarCell.css";
-import store from "../ReduxStore";
+import store, {rState} from "../ReduxStore";
 import Dispatcher from "../ReduxDispatcher";
 
 function CalendarCellLayer(props) {
@@ -26,7 +26,7 @@ function CalendarCell(props) {
 			day: props.dayNum
 		});
 
-		if(store.getState().zoom === "WEEK") {
+		if(rState().zoom === "WEEK") {
 			Dispatcher.Zoom("DAY");
 		}
 	};
