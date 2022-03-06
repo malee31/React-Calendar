@@ -57,6 +57,12 @@ function amendFocus(currentFocus, day) {
 	return extractFocusFromData(oldFocusDate, currentFocus.month);
 }
 
+/**
+ * Root reducer for Redux actions
+ * @param {Object} state Old state object
+ * @param {Object} action Action object. Must contain a type property and whatever other properties are associated with that type
+ * @return {Object} New state object. Must not have the same reference as the state param
+ */
 function rootReducer(state = initialState, action) {
 	switch(action.type) {
 		case "FOCUS":
