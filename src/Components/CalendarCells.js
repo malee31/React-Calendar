@@ -1,6 +1,6 @@
 import "../styles/calendar.css";
 import "../styles/calendarCell.css";
-import store, {rState} from "../ReduxStore";
+import {rState} from "../ReduxStore";
 import Dispatcher from "../ReduxDispatcher";
 
 function CalendarCellLayer(props) {
@@ -21,10 +21,7 @@ function CalendarCell(props) {
 			return;
 		}
 
-		store.dispatch({
-			type: "FOCUS_DAY",
-			day: props.dayNum
-		});
+		Dispatcher.FocusDay(props.dayNum);
 
 		if(rState().zoom === "WEEK") {
 			Dispatcher.Zoom("DAY");

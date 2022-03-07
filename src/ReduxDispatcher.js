@@ -14,7 +14,6 @@ function Zoom(level) {
 /**
  * Changes the focus based on an offset object. Attempts to reuse month data where possible to preserve referential equality
  * @param {Object} [baseOffset] Contains the number of years, months, weeks, and days to offset by
- * @constructor
  */
 function Focus(baseOffset) {
 	const offset = {
@@ -31,10 +30,7 @@ function Focus(baseOffset) {
 	newFocus.setDate(oldFocus.day.day + (offset.week * 7 + offset.day));
 
 	if(oldFocus.month.year === newFocus.getFullYear() && oldFocus.month.month === newFocus.getMonth()) {
-		store.dispatch({
-			type: "FOCUS_DAY",
-			day: newFocus.getDate()
-		});
+		FocusDay(newFocus.getDate());
 	} else {
 		store.dispatch({
 			type: "FOCUS",
@@ -43,8 +39,20 @@ function Focus(baseOffset) {
 	}
 }
 
+/**
+ * Switch focus to a different day in the current month
+ * @param {number} dayNum Day in month to change focus to
+ */
+function FocusDay(dayNum) {
+	store.dispatch({
+		type: "FOCUS_DAY",
+		day: dayNum
+	});
+}
+
 const Dispatcher = {
 	Zoom,
-	Focus
+	Focus,
+	FocusDay
 };
 export default Dispatcher;

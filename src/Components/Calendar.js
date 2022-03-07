@@ -1,5 +1,5 @@
 import "../styles/calendar.css";
-import store, {rState} from "../ReduxStore";
+import store, { rState } from "../ReduxStore";
 import Dispatcher from "../ReduxDispatcher";
 import { useEffect, useState } from "react";
 import CalendarCell from "./CalendarCells";
@@ -15,10 +15,7 @@ import CalendarCell from "./CalendarCells";
  */
 function CalendarRow(props) {
 	const focusRow = () => {
-		store.dispatch({
-			type: "FOCUS_DAY",
-			day: (props.weekData.days.find(day => day && day.dayNumber === rState().focus.day.dayNumber) || props.weekData.days.find(day => Boolean(day))).day
-		});
+		Dispatcher.FocusDay((props.weekData.days.find(day => day && day.dayNumber === rState().focus.day.dayNumber) || props.weekData.days.find(day => Boolean(day))).day);
 
 		if(rState().zoom === "MONTH") {
 			Dispatcher.Zoom("WEEK");
