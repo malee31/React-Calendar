@@ -116,6 +116,10 @@
 	background-color: var(--secondary);
 }
 
+.zoom-level-day .calendar-row{
+	transition: none;
+}
+
 .calendar-cell {
 	flex-grow: 1;
 	border: 1px solid var(--light);
