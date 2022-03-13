@@ -1,4 +1,4 @@
-import store, {rState} from "./ReduxStore";
+import store, { rState } from "./ReduxStore";
 
 /**
  * Changes the zoom level of the calendar

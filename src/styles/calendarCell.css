@@ -59,7 +59,8 @@
 	opacity: 0;
 }
 
-.zoom-level-week .focused-week .calendar-event-entry, .zoom-level-day .focused-day .calendar-event-entry {
+.zoom-level-week .focused-week .calendar-event-entry,
+.zoom-level-day .focused-day .calendar-event-entry {
 	display: flex;
 	opacity: 1;
 }

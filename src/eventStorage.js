@@ -68,7 +68,7 @@ function toKey(month, year) {
  */
 export function getMonthEvents(month, year) {
 	rangeCheck(month, year);
-	return JSON.parse(localStorage.getItem(toKey(month, year))) || {days: [], length: 0};
+	return JSON.parse(localStorage.getItem(toKey(month, year))) || { days: [], length: 0 };
 }
 
 /**
@@ -81,5 +81,5 @@ export function getMonthEvents(month, year) {
  */
 export function serialize(month, year, events) {
 	rangeCheck(month, year);
-	localStorage.setItem(toKey(month,year), JSON.stringify(events));
+	localStorage.setItem(toKey(month, year), JSON.stringify(events));
 }

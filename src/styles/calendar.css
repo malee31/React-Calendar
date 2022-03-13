@@ -26,7 +26,8 @@
 	justify-content: center;
 }
 
-.calendar-header-controls-left, .calendar-header-controls-right {
+.calendar-header-controls-left,
+.calendar-header-controls-right {
 	border: 0 solid var(--light-dark);
 	width: 5%;
 	cursor: pointer;
@@ -116,7 +117,7 @@
 	background-color: var(--secondary);
 }
 
-.zoom-level-day .calendar-row{
+.zoom-level-day .calendar-row {
 	transition: none;
 }
 

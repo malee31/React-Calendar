@@ -1,6 +1,6 @@
 import "../styles/calendar.css";
 import "../styles/calendarCell.css";
-import {rState} from "../ReduxStore";
+import { rState } from "../ReduxStore";
 import Dispatcher from "../ReduxDispatcher";
 
 function CalendarCellLayer(props) {
