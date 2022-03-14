@@ -2,7 +2,7 @@ import "../styles/calendar.css";
 import store, { rState } from "../ReduxStore";
 import Dispatcher from "../ReduxDispatcher";
 import { useEffect, useState } from "react";
-import CalendarCell from "./CalendarCells";
+import CalendarCell, { DisabledCalendarCell } from "./CalendarCells";
 
 /**
  * Creates and manages a row/week in the calendar
@@ -14,6 +14,12 @@ import CalendarCell from "./CalendarCells";
  * @constructor
  */
 function CalendarRow(props) {
+	const additionalClasses = [
+		"calendar-row",
+		props.collapse ? "flex-collapse" : "flex-collapsible",
+		props.focused ? "focused-week" : ""
+	].filter(val => Boolean(val));
+
 	const focusRow = () => {
 		Dispatcher.FocusDay((props.weekData.days.find(day => day && day.dayNumber === rState().focus.day.dayNumber) || props.weekData.days.find(day => Boolean(day))).day);
 
@@ -22,14 +28,16 @@ function CalendarRow(props) {
 		}
 	}
 
+	const focusedDay = rState().focus.day;
+
 	return (
-		<div className={`calendar-row ${props.collapse ? "flex-collapse" : "flex-collapsible"} ${props.focused ? "focused-week" : ""}`} onClick={focusRow}>
+		<div className={additionalClasses.join(" ")} onClick={focusRow}>
 			{props.weekData.days
 				.map((dayData, index) => {
 					if(dayData === null) {
-						return <CalendarCell collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayNum="" disabled={true} key={`Disabled-${index}`}/>;
+						return <DisabledCalendarCell collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} key={`Disabled-${index}`}/>;
 					} else {
-						return <CalendarCell focused={rState().focus.day === dayData} collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayNum={dayData.day} isWeekend={dayData.isWeekend} key={`Day-${dayData.day}`}/>;
+						return <CalendarCell focused={focusedDay === dayData} focusedDayOfWeek={focusedDay.dayOfWeek === dayData.dayOfWeek} collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayNum={dayData.day} isWeekend={dayData.isWeekend} key={`Day-${dayData.day}`}/>;
 					}
 				})
 			}

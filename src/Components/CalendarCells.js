@@ -14,13 +14,15 @@ function CalendarCellLayer(props) {
 }
 
 function CalendarCell(props) {
-	const dayNum = props.dayNum ?? -1;
+	const additionalClasses = [
+		"calendar-cell",
+		props.collapse ? "flex-collapse" : "flex-collapsible",
+		props.isWeekend && "weekend",
+		props.focusedDayOfWeek && "focused-day-of-week",
+		props.focused && "focused-day"
+	].filter(val => Boolean(val));
 
 	const focusCell = () => {
-		if(!props.dayNum) {
-			return;
-		}
-
 		Dispatcher.FocusDay(props.dayNum);
 
 		if(rState().zoom === "WEEK") {
@@ -28,63 +30,35 @@ function CalendarCell(props) {
 		}
 	};
 
-	if(props.disabled) {
-		return <div
-			className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.disabled ? "disabled" : ""} ${props.collapse ? "flex-collapse" : "flex-collapsible"}`}
-		/>;
-	}
-
 	return (
 		<div
-			className={`calendar-cell ${props.isWeekend ? "weekend" : ""} ${props.collapse ? "flex-collapse" : "flex-collapsible"} ${props.focused ? "focused-day" : ""}`}
+			className={additionalClasses.join(" ")}
 			onClick={focusCell}
 		>
 			<CalendarCellLayer className="calendar-event-layer">
-				<div className="calendar-cell-number">{dayNum}</div>
+				<div className="calendar-cell-number">{props.dayNum}</div>
 				<div className="calendar-event-container">
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
-					<div className="calendar-event-entry">
-						Sample Event
-					</div>
+					{Array(15).map(() => (
+						<div className="calendar-event-entry">
+							Sample Event
+						</div>
+					))}
 				</div>
 			</CalendarCellLayer>
 		</div>
 	);
+}
+
+export function DisabledCalendarCell(props) {
+	const additionalClasses = [
+		"calendar-cell",
+		"disabled",
+		props.collapse ? "flex-collapse" : "flex-collapsible",
+	].filter(val => Boolean(val));
+
+	return <div
+		className={additionalClasses.join(" ")}
+	/>;
 }
 
 export default CalendarCell;
