@@ -60,7 +60,7 @@ function CalendarCell(props) {
 			<CalendarCellLayer className="calendar-event-layer">
 				<div className="calendar-cell-number">{props.dayNum}</div>
 				<div className="calendar-event-container">
-					{Array(15).map(() => (
+					{Array(15).fill(0).map(() => (
 						<div className="calendar-event-entry">
 							Sample Event
 						</div>
