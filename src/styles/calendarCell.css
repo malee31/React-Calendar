@@ -47,26 +47,32 @@
 	flex-direction: row;
 	justify-content: flex-start;
 	align-items: center;
+	white-space: nowrap;
 	width: 100%;
 	min-height: 1.5rem;
 	padding: 0;
 	margin: 0;
 	border: none;
 	background-color: transparent;
+	overflow-x: hidden;
 	transition-duration: .25s;
 	transition-property: padding, border-radius, margin, opacity, background-color;
 }
 
-.zoom-level-week .focused-week .calendar-event-entry,
 .zoom-level-day .focused-day .calendar-event-entry {
 	border-radius: .25rem;
 	padding: .25rem .5rem;
 	margin: .4rem 0;
 	background-color: var(--secondary);
 	border: 1px solid var(--light);
+	text-wrap: initial;
 }
 
-.zoom-level-month .calendar-event-entry::before {
+.zoom-level-day .focused-day .calendar-event-entry::before {
+	display: none;
+}
+
+.calendar-event-entry::before {
 	width: .5rem;
 	height: .5rem;
 	margin: auto .25rem;
