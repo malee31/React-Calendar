@@ -2,6 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import getMonthData from "./scripts/dateData";
 
 /**
+ * @typedef ReduxState
+ * @property {FocusData} today The current date as a focus
+ * @property {FocusData} focus The currently focused date. Initially the same as today
+ * @property {string} zoom The zoom level of the calendar. Valid values are: MONTH, WEEK, DAY
+ */
+
+/**
  * @typedef FocusData
  * @property {MonthData} month Focused month data
  * @property {WeekData} week Focused week data
@@ -12,6 +19,9 @@ import getMonthData from "./scripts/dateData";
 const TODAY = new Date();
 const CURRENT_FOCUS = extractFocus(TODAY);
 
+/**
+ * @type {ReduxState}
+ */
 const initialState = {
 	today: CURRENT_FOCUS,
 	focus: CURRENT_FOCUS,
@@ -89,12 +99,11 @@ function rootReducer(state = initialState, action) {
 
 
 /**
- * Short for readState. A shorthand for store.getState()
- * @return {*} Returns the entire state from store.getState() or the value stored in the state with the specified key
+ * Short for readState. Shorthand for store.getState()
+ * @return {ReduxState} Returns the entire state from store.getState() or the value stored in the state with the specified key
  */
-export function rState(key) {
-	const currentState = store.getState();
-	return key ? currentState[key] : currentState;
+export function rState() {
+	return store.getState();
 }
 
 const store = configureStore({
