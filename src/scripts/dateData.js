@@ -1,3 +1,5 @@
+import { getMonthEvents } from "./eventStorage";
+
 /**
  * @typedef {Object} MonthData
  * @property {MonthData} [previous] MonthData of the previous month (without previous or next property)
@@ -21,6 +23,7 @@
  * @property {number} dayNumber Day of week. Starts with 0 as Sunday
  * @property {number} dayOfWeek Day of the week. Starts with 0 as Sunday and ends with 6 as Saturday
  * @property {boolean} isWeekend Whether the day of the week is Sunday or Saturday. Made for convenience
+ * @property {EventData} events All events on the given day
  */
 
 /**
@@ -31,6 +34,7 @@
  * @returns {MonthData} Returns MonthData object with a previous and next field
  */
 function getMonthData(year, month, includeSurrounding = false) {
+	const events = getMonthEvents(month + 1, year);
 	const dateProbe = new Date(year, month, 1);
 	month = dateProbe.getMonth();
 	year = dateProbe.getFullYear();
@@ -57,7 +61,8 @@ function getMonthData(year, month, includeSurrounding = false) {
 				day: dayOfMonth,
 				dayNumber: dateProbe.getDay(),
 				dayOfWeek: dayOfWeek,
-				isWeekend: dayOfWeek === 0 || dayOfWeek === 6
+				isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
+				events: events.find(event => event.day === dayOfMonth) || []
 				// isInMonth: probedMonth === month,
 				// dateString: dateProbe.toISOString()
 			};
@@ -69,6 +74,8 @@ function getMonthData(year, month, includeSurrounding = false) {
 		monthData.previous = getMonthData(year, month - 1);
 		monthData.next = getMonthData(year, month + 1);
 	}
+
+	console.log(monthData);
 	return monthData;
 }
 

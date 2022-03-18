@@ -28,10 +28,9 @@ function CalendarCellLayer(props) {
 /**
  * Used to display and contain the contents of a single day on the Calendar
  * @param {boolean} [props.collapse = false] Whether to collapse and hide the cell horizontally
- * @param {boolean} [props.isWeekend = false] Whether the current cell contains a weekend day
  * @param {boolean} [props.focusedDayOfWeek = false] Whether the current cell contains a day that has the same day of the week as the focus
  * @param {boolean} [props.focused = false] Whether the current cell IS the focus
- * @param {number} props.dayNum The day of the month to display in the corner
+ * @param {DayData} props.dayData Data about the day this cell contains
  * @return {JSX.Element} A single cell on the calendar
  * @constructor
  */
@@ -39,13 +38,13 @@ function CalendarCell(props) {
 	const additionalClasses = [
 		"calendar-cell",
 		props.collapse ? "flex-collapse" : "flex-collapsible",
-		props.isWeekend && "weekend",
+		props.dayData.isWeekend && "weekend",
 		props.focusedDayOfWeek && "focused-day-of-week",
 		props.focused && "focused-day"
 	].filter(val => Boolean(val));
 
 	const focusCell = () => {
-		Dispatcher.FocusDay(props.dayNum);
+		Dispatcher.FocusDay(props.dayData.day);
 
 		if(rState().zoom === "WEEK") {
 			Dispatcher.Zoom("DAY");
@@ -58,11 +57,11 @@ function CalendarCell(props) {
 			onClick={focusCell}
 		>
 			<CalendarCellLayer className="calendar-event-layer">
-				<div className="calendar-cell-number">{props.dayNum}</div>
+				<div className="calendar-cell-number">{props.dayData.day}</div>
 				<div className="calendar-event-container">
-					{Array(15).fill(0).map(() => (
-						<div className="calendar-event-entry">
-							Sample Event
+					{props.dayData.events.map(eventData => (
+						<div className="calendar-event-entry" key={eventData.title}>
+							{eventData.title} - ${eventData.description}
 						</div>
 					))}
 				</div>

@@ -36,7 +36,7 @@ export default function CalendarRow(props) {
 					if(dayData === null) {
 						return <DisabledCalendarCell collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} key={`Disabled-${index}`}/>;
 					} else {
-						return <CalendarCell focused={focusedDay === dayData} focusedDayOfWeek={focusedDay.dayOfWeek === dayData.dayOfWeek} collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayNum={dayData.day} isWeekend={dayData.isWeekend} key={`Day-${dayData.day}`}/>;
+						return <CalendarCell focused={focusedDay === dayData} focusedDayOfWeek={focusedDay.dayOfWeek === dayData.dayOfWeek} collapse={Boolean(props.dayCollapse) && props.dayCollapse.dayNumber !== index} dayData={dayData} key={`Day-${dayData.day}`}/>;
 					}
 				})
 			}
