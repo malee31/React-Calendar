@@ -83,3 +83,47 @@ export function serialize(month, year, events) {
 	rangeCheck(month, year);
 	localStorage.setItem(toKey(month, year), JSON.stringify(events));
 }
+
+/**
+ * Adds an event into localStorage based on the day it begins on
+ * @param {number} month Month number from 1-12
+ * @param {number} year Full year number
+ * @param {EventEntry} eventEntry A new event to add onto the month
+ * @throws {RangeError} Thrown when month is not between 1-12
+ * @throws {RangeError} Thrown when year is not a number greater than or equal to 0
+ */
+export function addEvent(month, year, eventEntry) {
+	const currentEvents = getMonthEvents(month, year);
+	const eventStart = new Date(eventEntry.start);
+	let eventData = currentEvents.find(eventData => eventData.day === eventStart.getDate());
+	if(!eventData) {
+		eventData = {
+			day: eventStart.getDate(),
+			events: []
+		};
+		currentEvents.push(eventData);
+	}
+
+	eventData.push(eventEntry);
+	serialize(month, year, currentEvents);
+}
+
+/**
+ * Creates a new EventEntry object
+ * @param {string} title Label for an event
+ * @param {string} [description=""] Description for an event
+ * @param {Date|string} start Date string for the start of an event
+ * @param {Date|string} end Date string for the end of an event
+ * @return {EventEntry} Returns the newly created event entry
+ */
+export function newEvent(title, description, start, end) {
+	/** @type EventEntry */
+	const eventEntry = {
+		title: title,
+		description: description,
+		start: start instanceof Date ? start.toString() : start,
+		end: end instanceof Date ? end.toString() : end,
+	};
+
+	return eventEntry;
+}
