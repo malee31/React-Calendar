@@ -13,3 +13,7 @@ Use advanced CSS selector like descendent selectors to conditionally style eleme
 * `zoom-level-month`: Applied when showing the entire month
 * `zoom-level-week`: Applied when showing an entire week
 * `zoom-level-day`: Applied when showing a singular day
+
+## Animation Mode
+* `animation-mode-zoom`: Default animation mode. Indicates that the most recent action was a zoom change
+* `animation-mode-flip`: Indicates that the most recent action was a focus change

@@ -75,7 +75,6 @@ function getMonthData(year, month, includeSurrounding = false) {
 		monthData.next = getMonthData(year, month + 1);
 	}
 
-	console.log(monthData);
 	return monthData;
 }
 

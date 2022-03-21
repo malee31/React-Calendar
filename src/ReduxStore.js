@@ -6,6 +6,7 @@ import getMonthData from "./scripts/dateData";
  * @property {FocusData} today The current date as a focus
  * @property {FocusData} focus The currently focused date. Initially the same as today
  * @property {string} zoom The zoom level of the calendar. Valid values are: MONTH, WEEK, DAY
+ * @property {string} animationMode Determines which animations should be active. Valid values are: ZOOM, FLIP
  */
 
 /**
@@ -25,7 +26,8 @@ const CURRENT_FOCUS = extractFocus(TODAY);
 const initialState = {
 	today: CURRENT_FOCUS,
 	focus: CURRENT_FOCUS,
-	zoom: "MONTH"
+	zoom: "MONTH",
+	animationMode: "ZOOM"
 };
 
 /**
@@ -84,13 +86,14 @@ function rootReducer(state = initialState, action) {
 		case "FOCUS_DAY":
 			return {
 				...state,
-				focus: amendFocus(state.focus, action.day)
+				focus: amendFocus(state.focus, action.day),
+				animationMode: "FLIP"
 			};
 		case "ZOOM":
-			// TODO: Allow altering whether ["MONTH", "WEEK", "DAY"] are being zoomed in onto
 			return {
 				...state,
-				zoom: action.zoom
+				zoom: action.zoom,
+				animationMode: "ZOOM"
 			};
 		default:
 			return state;

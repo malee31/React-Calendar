@@ -14,6 +14,11 @@ export default function Calendar() {
 	const [focusObj, setFocus] = useState(rState().focus);
 	const [zoomValue, setZoom] = useState(rState().zoom);
 	const monthData = focusObj.month;
+	const additionalContentClasses = [
+		"calendar-content",
+		`zoom-level-${zoomValue.toLowerCase()}`,
+		`animation-mode-${rState().animationMode.toLowerCase()}`
+	];
 
 	useEffect(() => {
 		return store.subscribe(() => {
@@ -26,11 +31,11 @@ export default function Calendar() {
 	return (
 		<div className="calendar-wrapper">
 			<CalendarHeader>
-				{monthData.monthName} {monthData.year}
+				{`${monthData.monthName} ${monthData.year}`}
 			</CalendarHeader>
 			<CalendarControls/>
 			<CalendarWeekdays only={zoomValue === "DAY" ? focusObj.day.dayNumber : ""}/>
-			<div className={`calendar-content zoom-level-${zoomValue.toLowerCase()}`}>
+			<div className={additionalContentClasses.join(" ")}>
 				{focusObj.month.weeks.map(weekData =>
 					<CalendarRow
 						weekData={weekData}
