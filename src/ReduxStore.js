@@ -84,16 +84,17 @@ function rootReducer(state = initialState, action) {
 				focus: extractFocus(newFocus)
 			};
 		case "FOCUS_DAY":
+			console.log(action)
 			return {
 				...state,
 				focus: amendFocus(state.focus, action.day),
-				animationMode: "FLIP"
+				animationMode: action.animationMode || "ZOOM"
 			};
 		case "ZOOM":
 			return {
 				...state,
 				zoom: action.zoom,
-				animationMode: "ZOOM"
+				animationMode: action.animationMode || "ZOOM"
 			};
 		default:
 			return state;

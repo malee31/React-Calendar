@@ -59,15 +59,17 @@
 	transition-property: padding, border-radius, margin, opacity, background-color;
 }
 
+.zoom-level-day.animation-mode-flip .focused-week .calendar-event-entry,
 .zoom-level-day .focused-day .calendar-event-entry {
 	border-radius: .25rem;
 	padding: .25rem .5rem;
 	margin: .4rem 0;
 	background-color: var(--secondary);
 	border: 1px solid var(--light);
-	text-wrap: initial;
+	word-wrap: initial;
 }
 
+.zoom-level-day.animation-mode-flip .focused-week .calendar-event-entry::before,
 .zoom-level-day .focused-day .calendar-event-entry::before {
 	display: none;
 }

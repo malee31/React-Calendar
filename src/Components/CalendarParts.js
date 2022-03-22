@@ -24,13 +24,13 @@ export function CalendarHeader(props) {
 				month: -offset.month,
 				week: -offset.week,
 				day: -offset.day
-			})}>
+			}, "FLIP")}>
 				&lt;
 			</div>
 			<div>
 				{props.children}
 			</div>
-			<div className="calendar-header-controls-right" onClick={() => Dispatcher.Focus(offset)}>
+			<div className="calendar-header-controls-right" onClick={() => Dispatcher.Focus(offset, "FLIP")}>
 				&gt;
 			</div>
 		</div>
