@@ -62,7 +62,7 @@ export function CalendarWeekdays(props) {
  * @return {JSX.Element}
  * @constructor
  */
-export function CalendarControls() {
+function CalendarDropdownControl() {
 	const [currentZoom, setZoom] = useState(rState().zoom);
 	const [showDropdown, setShow] = useState(false);
 	useEffect(() => {
@@ -78,16 +78,53 @@ export function CalendarControls() {
 
 	const zoomTitleCase = currentZoom[0].toUpperCase() + currentZoom.toLowerCase().slice(1);
 	return (
+		<div
+			className="calendar-control-button calendar-zoom-control"
+			tabIndex="0"
+			onBlur={() => setShow(false)}
+			onFocus={() => setShow(true)}
+		>
+				<span
+					onMouseDown={e => {
+						e.preventDefault();
+						e.stopPropagation();
+						setShow(!showDropdown)
+					}}
+				>{zoomTitleCase} ⯆</span>
+			{showDropdown ?
+				<div className="calendar-zoom-control-dropdown">
+					<div onClick={() => set("MONTH")}>Month</div>
+					<div onClick={() => set("WEEK")}>Week</div>
+					<div onClick={() => set("DAY")}>Day</div>
+				</div> : null}
+		</div>
+	);
+}
+
+/**
+ * Contains the control for adding events
+ * @return {JSX.Element}
+ * @constructor
+ */
+function CalendarControlAddEvent() {
+	return (
+		<div
+			className="calendar-control-button calendar-add-event"
+			onClick={() => {}}
+		>Add Event＋</div>
+	);
+}
+
+/**
+ * Contains the all the controls contained in the header of the calendar
+ * @return {JSX.Element}
+ * @constructor
+ */
+export function CalendarControls() {
+	return (
 		<div className="calendar-controls">
-			<div className="calendar-zoom-control">
-				<span onClick={() => setShow(!showDropdown)}>{zoomTitleCase}</span>
-				{showDropdown ?
-					<div className="calendar-zoom-control-dropdown">
-						<div onClick={() => set("MONTH")}>Month</div>
-						<div onClick={() => set("WEEK")}>Week</div>
-						<div onClick={() => set("DAY")}>Day</div>
-					</div> : null}
-			</div>
+			<CalendarDropdownControl/>
+			<CalendarControlAddEvent/>
 		</div>
 	);
 }

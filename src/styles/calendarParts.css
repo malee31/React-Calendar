@@ -34,24 +34,30 @@
 .calendar-controls {
 	width: 100%;
 	height: 3rem;
+	padding: .1rem 1rem;
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
 	border-top: 1px solid var(--dark);
+}
+
+.calendar-control-button {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+	width: 6rem;
+	height: 80%;
+	margin: 0 .25rem;
+	border-radius: .25rem;
+	border: 1px solid var(--dark);
+	cursor: pointer;
 }
 
 .calendar-zoom-control {
 	position: relative;
 	width: 6rem;
-	height: 80%;
-	border-radius: .25rem;
-	border: 1px solid var(--dark);
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-content: center;
-	cursor: pointer;
 }
 
 .calendar-zoom-control-dropdown {
