@@ -110,7 +110,10 @@ function CalendarControlAddEvent() {
 	return (
 		<div
 			className="calendar-control-button calendar-add-event"
-			onClick={() => {}}
+			onClick={() => store.dispatch({
+				type: "SET_EVENT_MODAL_VISIBILITY",
+				visible: true
+			})}
 		>Add Event＋</div>
 	);
 }

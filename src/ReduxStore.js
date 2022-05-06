@@ -7,6 +7,7 @@ import getMonthData from "./scripts/dateData";
  * @property {FocusData} focus The currently focused date. Initially the same as today
  * @property {string} zoom The zoom level of the calendar. Valid values are: MONTH, WEEK, DAY
  * @property {string} animationMode Determines which animations should be active. Valid values are: ZOOM, FLIP
+ * @property {boolean} modalVisibility Whether to show the create event modal
  */
 
 /**
@@ -27,7 +28,8 @@ const initialState = {
 	today: CURRENT_FOCUS,
 	focus: CURRENT_FOCUS,
 	zoom: "MONTH",
-	animationMode: "ZOOM"
+	animationMode: "ZOOM",
+	modalVisibility: false
 };
 
 /**
@@ -95,6 +97,11 @@ function rootReducer(state = initialState, action) {
 				...state,
 				zoom: action.zoom,
 				animationMode: action.animationMode || "ZOOM"
+			};
+		case "SET_EVENT_MODAL_VISIBILITY":
+			return {
+				...state,
+				modalVisibility: action.visible
 			};
 		default:
 			return state;
