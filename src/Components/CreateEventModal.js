@@ -1,6 +1,7 @@
 import "../styles/createEventModal.css"
 import store, { rState } from "../ReduxStore";
 import { useEffect, useRef, useState } from "react";
+import useTextInput, { TextInput } from "../scripts/useTextInput";
 
 export default function CreateEventModal() {
 	const [show, setShow] = useState(rState().modalVisibility);
@@ -10,6 +11,28 @@ export default function CreateEventModal() {
 		});
 	}, []);
 
+	const inputs = {
+		title: useTextInput("Event Title"),
+		description: useTextInput("Event Description"),
+		start: useTextInput("Event Start Time"),
+		end: useTextInput("Event End Time")
+	}
+
+	const inputData = {
+		title: inputs.title.value,
+		description: inputs.description.value,
+		start: inputs.start.value,
+		end: inputs.end.value
+	};
+
+	const clear = () => {
+		for(const input in inputs) {
+			if(inputs.hasOwnProperty(input)) {
+				inputs[input].setValue("");
+			}
+		}
+	}
+
 	const overlayRef = useRef();
 
 	const hide = () => {
@@ -18,6 +41,11 @@ export default function CreateEventModal() {
 			visible: false
 		});
 	};
+
+	const submit = () => {
+		console.log(inputData);
+		clear();
+	}
 
 	return show && (
 		<div ref={overlayRef} className="create-event-modal-overlay" onClick={e => {
@@ -33,9 +61,15 @@ export default function CreateEventModal() {
 			</div>
 			<div className="create-event-modal">
 				<h2 className="create-event-modal-title">Add New Event</h2>
+
+				<TextInput {...inputs.title}/>
+				<TextInput {...inputs.description}/>
+				<TextInput {...inputs.start}/>
+				<TextInput {...inputs.end}/>
+
 				<div
 					className="create-event-modal-button"
-					onClick={() => {}}
+					onClick={submit}
 				>
 					Add Event
 				</div>

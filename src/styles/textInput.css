@@ -1,0 +1,15 @@
+.use-text-input-label {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	min-width: 80%;
+}
+
+.use-text-input-entry {
+	width: 100%;
+	min-height: 2rem;
+	padding: .2rem .5rem;
+	border-radius: .2rem;
+	border: 1px solid lightgray;
+}
