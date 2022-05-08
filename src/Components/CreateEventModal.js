@@ -1,6 +1,6 @@
 import "../styles/createEventModal.css"
 import store, { rState } from "../ReduxStore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function CreateEventModal() {
 	const [show, setShow] = useState(rState().modalVisibility);
@@ -10,18 +10,34 @@ export default function CreateEventModal() {
 		});
 	}, []);
 
+	const overlayRef = useRef();
+
+	const hide = () => {
+		store.dispatch({
+			type: "SET_EVENT_MODAL_VISIBILITY",
+			visible: false
+		});
+	};
+
 	return show && (
-		<div className="create-event-modal-overlay">
+		<div ref={overlayRef} className="create-event-modal-overlay" onClick={e => {
+			if(e.target === overlayRef.current) {
+				hide();
+			}
+		}}>
+			<div
+				className="create-event-modal-hide-button"
+				onClick={hide}
+			>
+				✖
+			</div>
 			<div className="create-event-modal">
-				Create Event
+				<h2 className="create-event-modal-title">Add New Event</h2>
 				<div
-					className="create-event-modal-hide-button"
-					onClick={() => store.dispatch({
-						type: "SET_EVENT_MODAL_VISIBILITY",
-						visible: false
-					})}
+					className="create-event-modal-button"
+					onClick={() => {}}
 				>
-					Hide
+					Add Event
 				</div>
 			</div>
 		</div>

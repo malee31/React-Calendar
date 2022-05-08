@@ -47,9 +47,9 @@
 	flex-direction: column;
 	justify-content: center;
 	align-content: center;
-	width: 6rem;
+	min-width: 6rem;
 	height: 80%;
-	margin: 0 .25rem;
+	padding: 0 .25rem;
 	border-radius: .25rem;
 	border: 1px solid var(--dark);
 	cursor: pointer;
