@@ -107,7 +107,8 @@ export function addEvent(month, year, eventEntry) {
 		currentEvents.push(eventData);
 	}
 
-	eventData.push(eventEntry);
+	eventData.events.push(eventEntry);
+	console.log(eventData);
 	serialize(month, year, currentEvents);
 }
 
@@ -124,7 +125,7 @@ export function newEvent(title, description, start, end) {
 		title: title,
 		description: description,
 		id: uuidv4(),
-		start: start instanceof Date ? start.toString() : start,
-		end: end instanceof Date ? end.toString() : end,
+		start: start instanceof Date ? start.toString() : (new Date(start)).toString(),
+		end: end instanceof Date ? end.toString() : (new Date(end)).toString(),
 	};
 }

@@ -2,6 +2,7 @@ import "../styles/createEventModal.css"
 import store, { rState } from "../ReduxStore";
 import { useEffect, useRef, useState } from "react";
 import useTextInput, { TextInput } from "../scripts/useTextInput";
+import { addEvent, newEvent } from "../scripts/eventStorage";
 
 export default function CreateEventModal() {
 	const [show, setShow] = useState(rState().modalVisibility);
@@ -13,9 +14,9 @@ export default function CreateEventModal() {
 
 	const inputs = {
 		title: useTextInput("Event Title"),
-		description: useTextInput("Event Description"),
-		start: useTextInput("Event Start Time"),
-		end: useTextInput("Event End Time")
+		description: useTextInput("Description"),
+		start: useTextInput("Start Time"),
+		end: useTextInput("End Time")
 	}
 
 	const inputData = {
@@ -44,7 +45,8 @@ export default function CreateEventModal() {
 
 	const submit = () => {
 		console.log(inputData);
-		clear();
+		addEvent(5, 2022, newEvent(inputData.title, inputData.description, inputData.start, inputData.end));
+		// clear();
 	}
 
 	return show && (
@@ -64,8 +66,8 @@ export default function CreateEventModal() {
 
 				<TextInput {...inputs.title}/>
 				<TextInput {...inputs.description}/>
-				<TextInput {...inputs.start}/>
-				<TextInput {...inputs.end}/>
+				<TextInput type="datetime-local" {...inputs.start}/>
+				<TextInput type="datetime-local" {...inputs.end}/>
 
 				<div
 					className="create-event-modal-button"

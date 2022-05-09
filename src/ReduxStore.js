@@ -86,7 +86,6 @@ function rootReducer(state = initialState, action) {
 				focus: extractFocus(newFocus)
 			};
 		case "FOCUS_DAY":
-			console.log(action)
 			return {
 				...state,
 				focus: amendFocus(state.focus, action.day),

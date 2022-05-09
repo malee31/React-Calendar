@@ -15,13 +15,13 @@ export default function useTextInput(label) {
 	};
 }
 
-export function TextInput({label, value, onChange}) {
+export function TextInput({ label, value, onChange, type = "text" }) {
 	return (
 		<label className="use-text-input-label">
 			{label}
 			<input
 				className="use-text-input-entry"
-				type="text"
+				type={type}
 				onChange={onChange}
 				value={value}
 			/>

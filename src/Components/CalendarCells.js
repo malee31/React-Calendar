@@ -59,14 +59,9 @@ function CalendarCell(props) {
 			<CalendarCellLayer className="calendar-event-layer">
 				<div className="calendar-cell-number">{props.dayData.day}</div>
 				<div className="calendar-event-container">
-					{props.dayData.events.map(eventData => (
+					{props.dayData.events.events.map(eventData => (
 						<div className="calendar-event-entry" key={eventData.title}>
 							{eventData.title} - ${eventData.description}
-						</div>
-					))}
-					{Array(7).fill({title: "Main Title", description: "Details about event", id: "hi"}).map(eventData => (
-						<div className="calendar-event-entry" key={eventData.id}>
-							{eventData.title} - {eventData.description}
 						</div>
 					))}
 				</div>

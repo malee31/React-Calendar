@@ -62,7 +62,10 @@ function getMonthData(year, month, includeSurrounding = false) {
 				dayNumber: dateProbe.getDay(),
 				dayOfWeek: dayOfWeek,
 				isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
-				events: events.find(event => event.day === dayOfMonth) || []
+				events: events.find(event => event.day === dayOfMonth) || {
+					day: dateProbe.getDay(),
+					events: []
+				}
 				// isInMonth: probedMonth === month,
 				// dateString: dateProbe.toISOString()
 			};
