@@ -46,7 +46,11 @@ export default function CreateEventModal() {
 	const submit = () => {
 		console.log(inputData);
 		addEvent(5, 2022, newEvent(inputData.title, inputData.description, inputData.start, inputData.end));
-		// clear();
+		store.dispatch({
+			type: "REFRESH_EVENTS"
+		});
+		hide();
+		clear();
 	}
 
 	return show && (

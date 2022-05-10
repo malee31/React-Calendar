@@ -91,6 +91,11 @@ function rootReducer(state = initialState, action) {
 				focus: amendFocus(state.focus, action.day),
 				animationMode: action.animationMode || "ZOOM"
 			};
+		case "REFRESH_EVENTS":
+			return {
+				...state,
+				focus: extractFocus(new Date(state.focus.string))
+			}
 		case "ZOOM":
 			return {
 				...state,

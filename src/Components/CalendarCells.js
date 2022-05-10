@@ -60,8 +60,8 @@ function CalendarCell(props) {
 				<div className="calendar-cell-number">{props.dayData.day}</div>
 				<div className="calendar-event-container">
 					{props.dayData.events.events.map(eventData => (
-						<div className="calendar-event-entry" key={eventData.title}>
-							{eventData.title} - ${eventData.description}
+						<div className="calendar-event-entry" key={eventData.id}>
+							{eventData.title} - {eventData.description}
 						</div>
 					))}
 				</div>

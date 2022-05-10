@@ -48,7 +48,7 @@ export function CalendarWeekdays(props) {
 
 	return (
 		<div className="calendar-weekdays">
-			{weekdays.map((day,) =>
+			{weekdays.map(day =>
 				<div key={`${day}-Label`} className={weekdays[props.only] && weekdays[props.only] !== day ? "flex-collapse" : "flex-collapsible"}>
 					{day}
 				</div>
