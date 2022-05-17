@@ -1,8 +1,9 @@
 import "../styles/createEventModal.css"
 import store, { rState } from "../ReduxStore";
 import { useEffect, useRef, useState } from "react";
-import useTextInput, { TextInput } from "../scripts/useTextInput";
+import { TextInput } from "../scripts/useTextInput";
 import { addEvent, newEvent } from "../scripts/eventStorage";
+import { ImmediateCapturedProvider, useCapturedProviderValue } from "use-captured-state";
 
 export default function CreateEventModal() {
 	const [show, setShow] = useState(rState().modalVisibility);
@@ -12,26 +13,17 @@ export default function CreateEventModal() {
 		});
 	}, []);
 
-	const inputs = {
-		title: useTextInput("Event Title"),
-		description: useTextInput("Description"),
-		start: useTextInput("Start Time"),
-		end: useTextInput("End Time")
-	}
-
-	const inputData = {
-		title: inputs.title.value,
-		description: inputs.description.value,
-		start: inputs.start.value,
-		end: inputs.end.value
-	};
+	const capturedProviderValue = useCapturedProviderValue();
+	const {values} = capturedProviderValue;
 
 	const clear = () => {
-		for(const input in inputs) {
-			if(inputs.hasOwnProperty(input)) {
-				inputs[input].setValue("");
-			}
-		}
+		return console.log("Bug in use-captured-state. Pretend like it cleared");
+		// capturedProviderValue.batchUpdateKeys({
+		// 	title: "",
+		// 	description: "",
+		// 	start: "",
+		// 	end: "",
+		// });
 	}
 
 	const overlayRef = useRef();
@@ -44,8 +36,8 @@ export default function CreateEventModal() {
 	};
 
 	const submit = () => {
-		console.log(inputData);
-		addEvent(5, 2022, newEvent(inputData.title, inputData.description, inputData.start, inputData.end));
+		console.log(values);
+		addEvent(5, 2022, newEvent(values.title, values.description, values.start, values.end));
 		store.dispatch({
 			type: "REFRESH_EVENTS"
 		});
@@ -54,32 +46,48 @@ export default function CreateEventModal() {
 	}
 
 	return show && (
-		<div ref={overlayRef} className="create-event-modal-overlay" onClick={e => {
-			if(e.target === overlayRef.current) {
-				hide();
-			}
-		}}>
-			<div
-				className="create-event-modal-hide-button"
-				onClick={hide}
-			>
-				✖
-			</div>
-			<div className="create-event-modal">
-				<h2 className="create-event-modal-title">Add New Event</h2>
-
-				<TextInput {...inputs.title}/>
-				<TextInput {...inputs.description}/>
-				<TextInput type="datetime-local" {...inputs.start}/>
-				<TextInput type="datetime-local" {...inputs.end}/>
-
+		<ImmediateCapturedProvider value={capturedProviderValue}>
+			<div ref={overlayRef} className="create-event-modal-overlay" onClick={e => {
+				if(e.target === overlayRef.current) {
+					hide();
+				}
+			}}>
 				<div
-					className="create-event-modal-button"
-					onClick={submit}
+					className="create-event-modal-hide-button"
+					onClick={hide}
 				>
-					Add Event
+					✖
+				</div>
+				<div className="create-event-modal">
+					<h2 className="create-event-modal-title">Add New Event</h2>
+
+					<TextInput
+						label="Event Title"
+						name="title"
+					/>
+					<TextInput
+						label="Description"
+						name="description"
+					/>
+					<TextInput
+						label="Start Time"
+						name="start"
+						type="datetime-local"
+					/>
+					<TextInput
+						label="End Time"
+						name="end"
+						type="datetime-local"
+					/>
+
+					<div
+						className="create-event-modal-button"
+						onClick={submit}
+					>
+						Add Event
+					</div>
 				</div>
 			</div>
-		</div>
+		</ImmediateCapturedProvider>
 	);
 }
